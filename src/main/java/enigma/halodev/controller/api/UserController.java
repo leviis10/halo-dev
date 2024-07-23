@@ -1,6 +1,10 @@
 package enigma.halodev.controller.api;
 
 import enigma.halodev.dto.UserDTO;
+import enigma.halodev.dto.response.PageResponse;
+import enigma.halodev.dto.response.Response;
+import enigma.halodev.dto.response.SuccessResponse;
+import enigma.halodev.model.User;
 import enigma.halodev.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,31 +20,32 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<?> getAll(
+    public ResponseEntity<PageResponse<User>> getAll(
             @PageableDefault Pageable pageable
     ) {
-        return ResponseEntity.ok(userService.getAll(pageable));
+        return Response.page(userService.getAll(pageable));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(
+    public ResponseEntity<SuccessResponse<User>> getById(
             @PathVariable Long id
     ) {
-        return ResponseEntity.ok(userService.getById(id));
+        return Response.success(userService.getById(id));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateById(
+    public ResponseEntity<SuccessResponse<User>> updateById(
             @PathVariable Long id,
             @Valid @RequestBody UserDTO dto
     ) {
-        return ResponseEntity.ok(userService.updateById(id, dto));
+        return Response.success(userService.updateById(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteById(
+    public ResponseEntity<SuccessResponse<String>> deleteById(
             @PathVariable Long id
     ) {
         userService.deleteById(id);
+        return Response.success("User deleted");
     }
 }

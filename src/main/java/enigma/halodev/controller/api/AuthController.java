@@ -2,6 +2,8 @@ package enigma.halodev.controller.api;
 
 import enigma.halodev.dto.LoginDTO;
 import enigma.halodev.dto.RegisterDTO;
+import enigma.halodev.dto.response.Response;
+import enigma.halodev.dto.response.SuccessResponse;
 import enigma.halodev.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,21 +20,17 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(
+    public ResponseEntity<SuccessResponse<String>> register(
             @Valid @RequestBody RegisterDTO dto
     ) {
-        Map<String, String> response = new HashMap<>();
-        response.put("authToken", authService.register(dto));
-        return ResponseEntity.ok(response);
+        return Response.success(authService.register(dto));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(
+    public ResponseEntity<SuccessResponse<String>> login(
             @Valid @RequestBody LoginDTO dto
     ) {
-        Map<String, String> response = new HashMap<>();
-        response.put("authToken", authService.login(dto));
-        return ResponseEntity.ok(response);
+        return Response.success(authService.login(dto));
     }
 
 }

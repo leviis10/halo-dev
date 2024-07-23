@@ -1,4 +1,4 @@
-package enigma.halodev.controller;
+package enigma.halodev.controller.api;
 
 import enigma.halodev.dto.SkillDTO;
 import enigma.halodev.dto.response.PageResponse;
@@ -8,7 +8,6 @@ import enigma.halodev.model.Skill;
 import enigma.halodev.service.SkillService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
