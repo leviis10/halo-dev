@@ -1,5 +1,7 @@
 package enigma.halodev.service.implementation;
 
+import enigma.halodev.dto.SkillDTO;
+import enigma.halodev.exceptions.SkillNotFoundException;
 import enigma.halodev.model.Skill;
 import enigma.halodev.repository.SkillRepository;
 import enigma.halodev.service.SkillService;
@@ -14,8 +16,10 @@ public class SkillServiceImpl implements SkillService {
     private final SkillRepository skillRepository;
 
     @Override
-    public Skill create(Skill request) {
-        return skillRepository.save(request);
+    public Skill create(SkillDTO dto) {
+        return skillRepository.save(Skill.builder()
+                .name(dto.getName())
+                .build());
     }
 
     @Override
@@ -24,28 +28,20 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public Skill getOne(Long id) {
-        return skillRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("Skill with id " + id + " not found!"));
+    public Skill getById(Long id) {
+        return skillRepository.findById(id)
+                .orElseThrow(SkillNotFoundException::new);
     }
 
     @Override
-    public Skill update(Long id, Skill request) {
-        if(skillRepository.findById(id).isEmpty()){
-            throw new RuntimeException("Skill with id " + id + " not found!");
-        } {
-            Skill skill = this.getOne(id);
-            skill.setName(request.getName());
-            return skillRepository.save(skill);
-        }
+    public Skill updateById(Long id, SkillDTO dto) {
+        Skill foundSkill = getById(id);
+        foundSkill.setName(dto.getName());
+        return skillRepository.save(foundSkill);
     }
 
     @Override
-    public void delete(Long id) {
-        if(skillRepository.findById(id).isEmpty()){
-            throw new RuntimeException("Skill with id " + id + " not found!");
-        } else{
-            skillRepository.deleteById(id);
-        }
+    public void deleteById(Long id) {
+        skillRepository.deleteById(id);
     }
 }
