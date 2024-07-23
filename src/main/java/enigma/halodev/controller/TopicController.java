@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 @RestController
-@RequestMapping("/api/topic")
+@RequestMapping("/api/topics")
 @RequiredArgsConstructor
 public class TopicController {
     private final TopicService topicService;
