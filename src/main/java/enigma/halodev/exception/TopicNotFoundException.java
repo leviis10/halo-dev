@@ -1,4 +1,4 @@
-package enigma.halodev.exceptions;
+package enigma.halodev.exception;
 
 public class TopicNotFoundException extends RuntimeException {
     public TopicNotFoundException() {

@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TopicDTO {
-    @NotBlank
+    @NotBlank(message = "name must not be blank")
     private String name;
 }

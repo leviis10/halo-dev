@@ -1,7 +1,7 @@
 package enigma.halodev.service.implementation;
 
 import enigma.halodev.dto.SkillDTO;
-import enigma.halodev.exceptions.SkillNotFoundException;
+import enigma.halodev.exception.SkillNotFoundException;
 import enigma.halodev.model.Skill;
 import enigma.halodev.repository.SkillRepository;
 import enigma.halodev.service.SkillService;
@@ -19,7 +19,8 @@ public class SkillServiceImpl implements SkillService {
     public Skill create(SkillDTO dto) {
         return skillRepository.save(Skill.builder()
                 .name(dto.getName())
-                .build());
+                .build()
+        );
     }
 
     @Override

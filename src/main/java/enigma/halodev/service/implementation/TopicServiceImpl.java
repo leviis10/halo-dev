@@ -1,7 +1,7 @@
 package enigma.halodev.service.implementation;
 
 import enigma.halodev.dto.TopicDTO;
-import enigma.halodev.exceptions.TopicNotFoundException;
+import enigma.halodev.exception.TopicNotFoundException;
 import enigma.halodev.model.Topic;
 import enigma.halodev.repository.TopicRepository;
 import enigma.halodev.service.TopicService;

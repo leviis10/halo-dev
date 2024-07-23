@@ -2,7 +2,8 @@ package enigma.halodev.controller;
 
 import enigma.halodev.dto.response.ErrorResponse;
 import enigma.halodev.dto.response.Response;
-import enigma.halodev.exceptions.TopicNotFoundException;
+import enigma.halodev.exception.SkillNotFoundException;
+import enigma.halodev.exception.TopicNotFoundException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -11,15 +12,18 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestControllerAdvice
 public class ErrorController {
     @ExceptionHandler(TopicNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleTopicNotFoundException(TopicNotFoundException e) {
         return Response.error(List.of(e.getMessage()), "Topic not found", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(SkillNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleSkillNotFoundException(SkillNotFoundException e) {
+        return Response.error(List.of(e.getMessage()), "Skill not found", HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
