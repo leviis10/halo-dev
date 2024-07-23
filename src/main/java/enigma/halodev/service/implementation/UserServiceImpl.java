@@ -1,6 +1,7 @@
 package enigma.halodev.service.implementation;
 
 import enigma.halodev.dto.UserDTO;
+import enigma.halodev.exception.UserNotFoundException;
 import enigma.halodev.model.User;
 import enigma.halodev.repository.UserRepository;
 import enigma.halodev.service.UserService;
@@ -15,29 +16,29 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
-
     @Override
     public Page<User> getAll(Pageable pageable) {
         return userRepository.findAll(pageable);
     }
 
     @Override
-    public User getById(Integer id) {
-        return null;
+    public User getById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
     }
 
     @Override
-    public User updateById(Integer id, UserDTO updatedUser) {
-        return null;
+    public User updateById(Long id, UserDTO dto) {
+        User foundUser = getById(id);
+        foundUser.setFirstName(dto.getFirstName());
+        foundUser.setLastName(dto.getLastName());
+        foundUser.setUsername(dto.getUsername());
+        foundUser.setEmail(dto.getEmail());
+        return userRepository.save(foundUser);
     }
 
     @Override
-    public void deleteById(Integer id) {
-
-    }
-
-    @Override
-    public User topup(Integer id, Integer amount) {
-        return null;
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
     }
 }

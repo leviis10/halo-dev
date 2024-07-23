@@ -1,9 +1,10 @@
 package enigma.halodev.service;
 
-import enigma.halodev.dto.AuthDTO;
-import org.springframework.http.ResponseEntity;
+import enigma.halodev.dto.LoginDTO;
+import enigma.halodev.dto.RegisterDTO;
 
 public interface AuthService {
-    ResponseEntity<?> register(AuthDTO.RegisterRequest request);
-    AuthDTO.AuthenticationResponse authenticate(AuthDTO.AuthenticationRequest request);
+    String register(RegisterDTO dto);
+
+    String login(LoginDTO dto);
 }

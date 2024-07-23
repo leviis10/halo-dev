@@ -1,29 +1,38 @@
 package enigma.halodev.controller.api;
 
-import enigma.halodev.dto.AuthDTO;
+import enigma.halodev.dto.LoginDTO;
+import enigma.halodev.dto.RegisterDTO;
 import enigma.halodev.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
-    private final AuthService authenticationService;
+    private final AuthService authService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(
-            @RequestBody AuthDTO.RegisterRequest request
+            @Valid @RequestBody RegisterDTO dto
     ) {
-        return ResponseEntity.ok(authenticationService.register(request));
+        Map<String, String> response = new HashMap<>();
+        response.put("authToken", authService.register(dto));
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthDTO.AuthenticationResponse> authenticate(
-            @RequestBody AuthDTO.AuthenticationRequest request
+    public ResponseEntity<?> login(
+            @Valid @RequestBody LoginDTO dto
     ) {
-        return ResponseEntity.ok(authenticationService.authenticate(request));
+        Map<String, String> response = new HashMap<>();
+        response.put("authToken", authService.login(dto));
+        return ResponseEntity.ok(response);
     }
 
 }
