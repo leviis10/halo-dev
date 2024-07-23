@@ -1,18 +1,18 @@
 package enigma.halodev.service;
 
+import enigma.halodev.dto.TopicDTO;
 import enigma.halodev.model.Topic;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface TopicService {
+    Topic create(TopicDTO topic);
 
-    Topic createTopic(Topic topic);
+    Page<Topic> getAll(Pageable pageable);
 
-    Page<Topic> getAllTopic(Pageable pageable);
+    Topic getById(Long id);
 
-    Topic getTopic(Long id);
+    Topic updateById(Long id, TopicDTO topic);
 
-    Topic updateTopic(Long id, Topic topic);
-
-    void deleteTopic(Long id);
+    void deleteById(Long id);
 }
