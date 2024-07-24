@@ -28,6 +28,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
             File base64Image = ConvertMultipartToFile.convert(image);
             Map uploadResult = cloudinary.uploader().upload(base64Image, ObjectUtils.asMap("resource_type", "image", "folder", "halodev"));
             HashMap<String, String> resultResponse = new HashMap<>();
+            base64Image.delete(); // Hapus gambar dari local setelah upload ke cloudinary
 
             resultResponse.put("secure_url", (String) uploadResult.get("secure_url"));
             resultResponse.put("public_id", (String) uploadResult.get("public_id"));
