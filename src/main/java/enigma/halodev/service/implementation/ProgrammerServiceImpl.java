@@ -45,9 +45,8 @@ public class ProgrammerServiceImpl implements ProgrammerService {
 
     @Override
     public Programmer updateById(Long id, ProgrammerDTO dto) {
-        User foundUser = userService.getById(id);
         Programmer programmer = new Programmer();
-        programmer.setUser(foundUser);
+
         programmer.setPrice(dto.getPrice());
 
         return programmerRepository.save(programmer);

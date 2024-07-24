@@ -28,6 +28,7 @@ public class Topic {
     @Column(nullable = false, unique = true)
     private String name;
 
+    // virtual
     @OneToMany(mappedBy = "topic")
     private List<Session> sessions;
 }

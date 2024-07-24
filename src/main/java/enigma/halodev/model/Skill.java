@@ -1,5 +1,6 @@
 package enigma.halodev.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
@@ -10,6 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -24,4 +27,8 @@ public class Skill {
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    // virtual
+    @ManyToMany(mappedBy = "skills")
+    private List<Programmer> programmers;
 }

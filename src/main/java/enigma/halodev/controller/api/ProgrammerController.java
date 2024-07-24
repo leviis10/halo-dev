@@ -23,8 +23,8 @@ public class ProgrammerController {
 
     @PostMapping
     public ResponseEntity<SuccessResponse<Programmer>> create(
-            @Valid @RequestBody ProgrammerDTO dto,
-            Authentication auth
+            Authentication auth,
+            @Valid @RequestBody ProgrammerDTO dto
     ) {
         return Response.success(programmerService.create(auth, dto), "Programmer Created", HttpStatus.CREATED);
     }

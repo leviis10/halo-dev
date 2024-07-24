@@ -23,6 +23,8 @@ public class Session {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    @Lob
     private String description;
 
     @ManyToOne
@@ -40,6 +42,7 @@ public class Session {
     @JsonIgnore
     private Topic topic;
 
+    // virtual
     @OneToOne(mappedBy = "session", cascade = CascadeType.ALL)
     private Transaction transaction;
 }

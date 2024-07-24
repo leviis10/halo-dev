@@ -31,6 +31,16 @@ public class Programmer {
     @Column(nullable = false)
     private Double price;
 
+    // virtual row
+    @ManyToMany
+    @JoinTable(
+            name = "programmers_skills",
+            joinColumns = @JoinColumn(name = "programmer_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
+    @JsonIgnore
+    private List<Skill> skills;
+
     @OneToMany(mappedBy = "programmer")
     private List<Session> sessions;
 }

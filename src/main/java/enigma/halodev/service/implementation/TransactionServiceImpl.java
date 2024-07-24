@@ -35,10 +35,10 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Transaction updateById(Long id, Transaction request) {
-        Transaction updatedTransaction = getById(id);
-        updatedTransaction.setStatus(PaymentStatus.PAID);
+        Transaction foundTransaction = getById(id);
+        foundTransaction.setStatus(PaymentStatus.PAID);
 
-        return transactionRepository.save(updatedTransaction);
+        return transactionRepository.save(foundTransaction);
     }
 
     @Override

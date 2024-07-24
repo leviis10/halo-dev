@@ -19,11 +19,11 @@ public class SessionDTO {
     private String description;
 
     @NotBlank(message = "User id must not be blank")
-    private Long user_id;
+    private Long userId;
 
     @NotBlank(message = "Programmer id must not be blank")
-    private Long programmer_id;
+    private Long programmerId;
 
     @NotBlank(message = "Topic id must not be blank")
-    private Long topic_id;
+    private Long topicId;
 }

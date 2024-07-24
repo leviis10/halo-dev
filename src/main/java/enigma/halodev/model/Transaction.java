@@ -2,7 +2,6 @@ package enigma.halodev.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,7 +29,8 @@ public class Transaction {
     @JsonIgnore
     private Session session;
 
-    private Double payment_nominal;
+    @Column(nullable = false)
+    private Double paymentNominal;
 
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
