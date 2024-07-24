@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService {
         foundUser.setLastName(dto.getLastName());
         foundUser.setUsername(dto.getUsername());
         foundUser.setEmail(dto.getEmail());
+
         return userRepository.save(foundUser);
     }
 

@@ -38,6 +38,7 @@ public class SkillServiceImpl implements SkillService {
     public Skill updateById(Long id, SkillDTO dto) {
         Skill foundSkill = getById(id);
         foundSkill.setName(dto.getName());
+
         return skillRepository.save(foundSkill);
     }
 

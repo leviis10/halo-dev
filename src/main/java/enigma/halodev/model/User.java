@@ -48,6 +48,12 @@ public class User implements UserDetails {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    @OneToOne(mappedBy = "user")
+    private Programmer programmer;
+
+    @OneToMany(mappedBy = "user")
+    private List<Session> sessions;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();

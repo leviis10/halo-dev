@@ -1,12 +1,7 @@
 package enigma.halodev.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,15 +14,23 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "topics")
-public class Topic {
+@Table(name = "programmers")
+public class Programmer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String name;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
 
-    @OneToMany(mappedBy = "topic")
+    @Enumerated(EnumType.STRING)
+    private Availability availability;
+
+    @Column(nullable = false)
+    private Double price;
+
+    @OneToMany(mappedBy = "programmer")
     private List<Session> sessions;
 }

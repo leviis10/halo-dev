@@ -48,7 +48,7 @@ public class TopicController {
             @PathVariable Long id,
             @Valid @RequestBody TopicDTO dto
     ) {
-        return Response.success(topicService.updateById(id, dto), "Success update");
+        return Response.success(topicService.updateById(id, dto), "Topic updated");
     }
 
     @DeleteMapping("/{id}")
@@ -56,6 +56,6 @@ public class TopicController {
             @PathVariable Long id
     ) {
         topicService.deleteById(id);
-        return Response.success("Delete success");
+        return Response.success("Topic deleted");
     }
 }
