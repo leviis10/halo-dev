@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,9 +23,10 @@ public class ProgrammerController {
 
     @PostMapping
     public ResponseEntity<SuccessResponse<Programmer>> create(
-            @Valid @RequestBody ProgrammerDTO dto
+            @Valid @RequestBody ProgrammerDTO dto,
+            Authentication auth
     ) {
-        return Response.success(programmerService.create(dto), "Programmer Created", HttpStatus.CREATED);
+        return Response.success(programmerService.create(auth, dto), "Programmer Created", HttpStatus.CREATED);
     }
 
     @GetMapping

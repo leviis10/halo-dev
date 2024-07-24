@@ -11,6 +11,7 @@ import enigma.halodev.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,15 +21,11 @@ public class ProgrammerServiceImpl implements ProgrammerService {
     private final UserService userService;
 
     @Override
-    public Programmer create(ProgrammerDTO dto) {
-        User foundUser = userService.getById(dto.getUser_id());
-
-        if(foundUser == null){
-            throw new UserNotFoundException();
-        }
+    public Programmer create(Authentication auth, ProgrammerDTO dto) {
+        User user = (User) auth.getPrincipal();
 
         return programmerRepository.save(Programmer.builder()
-                .user(foundUser)
+                .user(user)
                 .availability(Availability.AVAILABLE)
                 .price(dto.getPrice())
                 .build()
@@ -50,12 +47,8 @@ public class ProgrammerServiceImpl implements ProgrammerService {
     public Programmer updateById(Long id, ProgrammerDTO dto) {
         User foundUser = userService.getById(id);
         Programmer programmer = new Programmer();
-        if(foundUser == null){
-            throw new UserNotFoundException();
-        } else{
-            programmer.setUser(foundUser);
-            programmer.setPrice(dto.getPrice());
-        }
+        programmer.setUser(foundUser);
+        programmer.setPrice(dto.getPrice());
 
         return programmerRepository.save(programmer);
     }

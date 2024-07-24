@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
-    private final SessionService sessionService;
 
     @Override
     public Transaction create(Transaction request) {
@@ -36,9 +35,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Transaction updateById(Long id, Transaction request) {
-        Session session = sessionService.getById(id);
-        Transaction updatedTransaction = new Transaction();
-        updatedTransaction.setSession(session);
+        Transaction updatedTransaction = getById(id);
         updatedTransaction.setStatus(PaymentStatus.PAID);
 
         return transactionRepository.save(updatedTransaction);
