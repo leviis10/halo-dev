@@ -2,13 +2,10 @@ package enigma.halodev.model;
 
 import jakarta.persistence.*;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
