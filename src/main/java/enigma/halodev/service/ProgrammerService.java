@@ -4,9 +4,10 @@ import enigma.halodev.dto.ProgrammerDTO;
 import enigma.halodev.model.Programmer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 
 public interface ProgrammerService {
-    Programmer create(ProgrammerDTO dto);
+    Programmer create(Authentication auth, ProgrammerDTO dto);
 
     Page<Programmer> getAll(Pageable pageable);
 

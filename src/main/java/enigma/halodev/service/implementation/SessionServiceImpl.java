@@ -21,25 +21,28 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public Session create(SessionDTO dto) {
-        User foundUser = userService.getById(dto.getUser_id());
-        Programmer foundProgrammer = programmerService.getById(dto.getProgrammer_id());
-        Topic foundTopic = topicService.getById(dto.getTopic_id());
+        User foundUser = userService.getById(dto.getUserId());
+        Programmer foundProgrammer = programmerService.getById(dto.getProgrammerId());
+        Topic foundTopic = topicService.getById(dto.getTopicId());
 
-        Transaction transaction = new Transaction();
-        transaction.setPayment_nominal(foundProgrammer.getPrice());
-        transaction.setStatus(PaymentStatus.UNPAID);
-
-        transactionService.create(transaction);
-
-        return sessionRepository.save(Session.builder()
+        Session savedSession = sessionRepository.save(Session.builder()
                 .name(dto.getName())
                 .description(dto.getDescription())
                 .user(foundUser)
                 .programmer(foundProgrammer)
                 .topic(foundTopic)
-                .transaction(transaction)
                 .build()
         );
+
+
+        Transaction transaction = Transaction.builder()
+                .paymentNominal(foundProgrammer.getPrice())
+                .status(PaymentStatus.UNPAID)
+                .session(savedSession)
+                .build();
+        transactionService.create(transaction);
+
+        return savedSession;
     }
 
     @Override
