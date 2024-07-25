@@ -38,7 +38,7 @@ public class TransactionController {
             @PathVariable Long id,
             @Valid @RequestBody Transaction request
     ) {
-        return Response.success(transactionService.updateById(id, request), "Transaction Updated");
+        return Response.success(transactionService.updateById(id, request), "Transaction updated");
     }
 
     @DeleteMapping("/{id}")

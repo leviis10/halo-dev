@@ -1,33 +1,44 @@
 package enigma.halodev.service.implementation;
 
 import enigma.halodev.dto.ProgrammerDTO;
+import enigma.halodev.dto.ProgrammerSkillsDTO;
 import enigma.halodev.exception.UserNotFoundException;
 import enigma.halodev.model.Availability;
 import enigma.halodev.model.Programmer;
+import enigma.halodev.model.Skill;
 import enigma.halodev.model.User;
 import enigma.halodev.repository.ProgrammerRepository;
 import enigma.halodev.service.ProgrammerService;
-import enigma.halodev.service.UserService;
+import enigma.halodev.service.SkillService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProgrammerServiceImpl implements ProgrammerService {
     private final ProgrammerRepository programmerRepository;
-    private final UserService userService;
+    private final SkillService skillService;
 
     @Override
     public Programmer create(Authentication auth, ProgrammerDTO dto) {
         User user = (User) auth.getPrincipal();
 
+        Set<Skill> skills = skillService.getAllById(dto.getSkillsId());
+
         return programmerRepository.save(Programmer.builder()
                 .user(user)
                 .availability(Availability.AVAILABLE)
                 .price(dto.getPrice())
+                .skills(skills)
                 .build()
         );
     }
@@ -44,10 +55,37 @@ public class ProgrammerServiceImpl implements ProgrammerService {
     }
 
     @Override
-    public Programmer updateById(Long id, ProgrammerDTO dto) {
-        Programmer programmer = new Programmer();
-
+    public Programmer updateById(Authentication auth, ProgrammerDTO dto) {
+        User user = (User) auth.getPrincipal();
+        Programmer programmer = programmerRepository.findByUserId(user.getId());
         programmer.setPrice(dto.getPrice());
+
+        return programmerRepository.save(programmer);
+    }
+
+    @Override
+    public Programmer deleteProgrammerSkill(Authentication auth, ProgrammerSkillsDTO dto) {
+        log.info("start");
+        User user = (User) auth.getPrincipal();
+        Programmer programmer = programmerRepository.findByUserId(user.getId());
+        Set<Skill> updatedSkills = new HashSet<>();
+        updatedSkills.addAll(programmer.getSkills()
+                .stream()
+                .filter(value -> !(dto.getSkillsId().contains(value.getId())))
+                .collect(Collectors.toSet())
+        );
+
+        programmer.setSkills(updatedSkills);
+
+        return programmerRepository.save(programmer);
+    }
+
+    @Override
+    public Programmer addProgrammerSkill(Authentication auth, ProgrammerSkillsDTO dto) {
+        User user = (User) auth.getPrincipal();
+        Programmer programmer = programmerRepository.findByUserId(user.getId());
+        Set<Skill> foundSkills = skillService.getAllById(dto.getSkillsId());
+        programmer.getSkills().addAll(foundSkills);
 
         return programmerRepository.save(programmer);
     }

@@ -34,7 +34,6 @@ public class SessionServiceImpl implements SessionService {
                 .build()
         );
 
-
         Transaction transaction = Transaction.builder()
                 .paymentNominal(foundProgrammer.getPrice())
                 .status(PaymentStatus.UNPAID)

@@ -24,7 +24,7 @@ public class SessionController {
     public ResponseEntity<SuccessResponse<Session>> create(
             @Valid @RequestBody SessionDTO dto
     ) {
-        return Response.success(sessionService.create(dto), "Session Created", HttpStatus.CREATED);
+        return Response.success(sessionService.create(dto), "Session created", HttpStatus.CREATED);
     }
 
     @GetMapping

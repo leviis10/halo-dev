@@ -24,7 +24,7 @@ public class TopicController {
     public ResponseEntity<SuccessResponse<Topic>> create(
             @Valid @RequestBody TopicDTO dto
     ) {
-        return Response.success(topicService.create(dto), "Topic Created", HttpStatus.CREATED);
+        return Response.success(topicService.create(dto), "Topic created", HttpStatus.CREATED);
     }
 
     @GetMapping
