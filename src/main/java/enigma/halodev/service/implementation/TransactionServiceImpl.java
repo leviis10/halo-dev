@@ -2,10 +2,8 @@ package enigma.halodev.service.implementation;
 
 import enigma.halodev.exception.TransactionNotFoundException;
 import enigma.halodev.model.PaymentStatus;
-import enigma.halodev.model.Session;
 import enigma.halodev.model.Transaction;
 import enigma.halodev.repository.TransactionRepository;
-import enigma.halodev.service.SessionService;
 import enigma.halodev.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
