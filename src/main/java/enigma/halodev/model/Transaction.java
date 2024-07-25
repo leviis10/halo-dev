@@ -34,4 +34,6 @@ public class Transaction {
 
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
+
+    private String redirectUrl;
 }

@@ -41,6 +41,10 @@ public class SessionServiceImpl implements SessionService {
                 .session(savedSession)
                 .build();
         transactionService.create(transaction);
+        savedSession.setTransaction(transaction);
+
+        // create transaction with midtrans API and insert redirectUrl
+        transaction.setRedirectUrl(null); // set redirect url here
 
         return savedSession;
     }
