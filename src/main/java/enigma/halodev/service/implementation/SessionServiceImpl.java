@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SessionServiceImpl implements SessionService {
     private final SessionRepository sessionRepository;
-    private final UserService userService;
     private final ProgrammerService programmerService;
     private final TopicService topicService;
     private final TransactionService transactionService;
@@ -42,6 +41,8 @@ public class SessionServiceImpl implements SessionService {
                 .build();
         transactionService.create(transaction);
         savedSession.setTransaction(transaction);
+
+        foundProgrammer.setAvailability(Availability.NOT_AVAILABLE);
 
         // create transaction with midtrans API and insert redirectUrl
         transaction.setRedirectUrl(null); // set redirect url here

@@ -23,5 +23,7 @@ public interface ProgrammerService {
 
     Programmer addProgrammerSkill(Authentication auth, ProgrammerSkillsDTO dto);
 
+    Programmer updateAvailability(Programmer request);
+
     void deleteById(Long id);
 }

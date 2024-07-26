@@ -24,7 +24,7 @@ public class Session {
     private String name;
 
     @Column(nullable = false)
-    @Lob
+//    @Lob
     private String description;
 
     @ManyToOne

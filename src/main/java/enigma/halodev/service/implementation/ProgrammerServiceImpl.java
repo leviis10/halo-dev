@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ProgrammerServiceImpl implements ProgrammerService {
     private final ProgrammerRepository programmerRepository;
     private final SkillService skillService;
@@ -65,7 +64,6 @@ public class ProgrammerServiceImpl implements ProgrammerService {
 
     @Override
     public Programmer deleteProgrammerSkill(Authentication auth, ProgrammerSkillsDTO dto) {
-        log.info("start");
         User user = (User) auth.getPrincipal();
         Programmer programmer = programmerRepository.findByUserId(user.getId());
         Set<Skill> updatedSkills = new HashSet<>();
@@ -88,6 +86,11 @@ public class ProgrammerServiceImpl implements ProgrammerService {
         programmer.getSkills().addAll(foundSkills);
 
         return programmerRepository.save(programmer);
+    }
+
+    @Override
+    public Programmer updateAvailability(Programmer request) {
+        return null;
     }
 
     @Override
