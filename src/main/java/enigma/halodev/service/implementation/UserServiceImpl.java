@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User uploadProfilePicture(Authentication auth, MultipartFile image) throws IOException {
         User currentUser = (User) auth.getPrincipal();
-        currentUser.setProfilePicture(cloudinaryService.upload(currentUser.getUsername(), image));
+        currentUser.setProfilePicture(cloudinaryService.upload(currentUser, image));
         return userRepository.save(currentUser);
     }
 }
