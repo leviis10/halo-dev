@@ -24,7 +24,7 @@ public class SkillController {
     public ResponseEntity<SuccessResponse<Skill>> create(
             @Valid @RequestBody SkillDTO dto
     ) {
-        return Response.success(skillService.create(dto), "Skill Created", HttpStatus.CREATED);
+        return Response.success(skillService.create(dto), "Skill created", HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -46,7 +46,7 @@ public class SkillController {
             @PathVariable Long id,
             @Valid @RequestBody SkillDTO dto
     ) {
-        return Response.success(skillService.updateById(id, dto));
+        return Response.success(skillService.updateById(id, dto), "Skill updated");
     }
 
     @DeleteMapping("/{id}")

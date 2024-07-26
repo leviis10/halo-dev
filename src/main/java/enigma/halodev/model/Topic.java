@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -22,4 +24,8 @@ public class Topic {
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    // virtual
+    @OneToMany(mappedBy = "topic")
+    private List<Session> sessions;
 }

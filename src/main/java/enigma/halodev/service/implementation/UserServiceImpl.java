@@ -39,12 +39,20 @@ public class UserServiceImpl implements UserService {
         foundUser.setLastName(dto.getLastName());
         foundUser.setUsername(dto.getUsername());
         foundUser.setEmail(dto.getEmail());
+
         return userRepository.save(foundUser);
     }
 
     @Override
     public void deleteById(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public void updateBalance(Long id, Integer amount) {
+        User foundUser = getById(id);
+        foundUser.setBalance(foundUser.getBalance() + amount);
+        userRepository.save(foundUser);
     }
 
     @Override

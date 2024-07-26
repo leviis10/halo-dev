@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +23,11 @@ public class SkillServiceImpl implements SkillService {
                 .name(dto.getName())
                 .build()
         );
+    }
+
+    @Override
+    public Set<Skill> getAllById(Set<Long> skillsId) {
+        return skillRepository.findByIdIn(skillsId);
     }
 
     @Override
@@ -38,6 +45,7 @@ public class SkillServiceImpl implements SkillService {
     public Skill updateById(Long id, SkillDTO dto) {
         Skill foundSkill = getById(id);
         foundSkill.setName(dto.getName());
+
         return skillRepository.save(foundSkill);
     }
 

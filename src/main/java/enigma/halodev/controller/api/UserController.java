@@ -43,7 +43,7 @@ public class UserController {
             @PathVariable Long id,
             @Valid @RequestBody UserDTO dto
     ) {
-        return Response.success(userService.updateById(id, dto));
+        return Response.success(userService.updateById(id, dto), "User updated");
     }
 
     @DeleteMapping("/{id}")

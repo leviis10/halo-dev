@@ -14,6 +14,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SkillDTO {
-    @NotBlank(message = "name must not be blank")
+    @NotBlank(message = "Name must not be blank")
     private String name;
 }

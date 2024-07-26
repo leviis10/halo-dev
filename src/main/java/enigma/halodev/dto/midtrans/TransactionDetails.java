@@ -1,7 +1,7 @@
-package enigma.halodev.dto;
+package enigma.halodev.dto.midtrans;
+
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class TopicDTO {
-    @NotBlank(message = "Name must not be blank")
-    private String name;
+public class TransactionDetails {
+    private String order_id;
+    private Double gross_amount;
 }
