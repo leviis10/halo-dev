@@ -2,6 +2,7 @@ package enigma.halodev.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,14 +17,12 @@ public class SessionDTO {
     @NotBlank(message = "Name must not be blank")
     private String name;
 
+    @NotBlank
     private String description;
 
-    @NotBlank(message = "User id must not be blank")
-    private Long userId;
-
-    @NotBlank(message = "Programmer id must not be blank")
+    @NotNull(message = "Programmer id must not be blank")
     private Long programmerId;
 
-    @NotBlank(message = "Topic id must not be blank")
+    @NotNull(message = "Topic id must not be blank")
     private Long topicId;
 }

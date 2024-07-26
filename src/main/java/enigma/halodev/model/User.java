@@ -41,7 +41,7 @@ public class User implements UserDetails {
     private String password;
 
     @Column(nullable = false)
-    private Integer balance;
+    private Double balance;
 
     private String profilePicture;
 
@@ -49,11 +49,13 @@ public class User implements UserDetails {
     private LocalDateTime createdAt;
 
     // virtual
+    @JsonIgnore
     @OneToOne(mappedBy = "user")
     private Programmer programmer;
 
-    @OneToMany(mappedBy = "user")
-    private List<Session> sessions;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<Transaction> transactions;
 
     // method from user details
     @Override

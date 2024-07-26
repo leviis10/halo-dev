@@ -12,6 +12,9 @@ Future of on-demand programming services
     - DB_PASSWORD
     - JWT_SECRET
     - JWT_EXPIRATION
+    - CLOUDINARY_API_KEY
+    - CLOUDINARY_API_SECRET
+    - CLOUDINARY_CLOUD_NAME
 2. That it
 
 ## Endpoint

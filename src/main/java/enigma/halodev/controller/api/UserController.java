@@ -1,6 +1,7 @@
 package enigma.halodev.controller.api;
 
 import enigma.halodev.dto.UserDTO;
+import enigma.halodev.dto.UserDTO.topUpDto;
 import enigma.halodev.dto.response.PageResponse;
 import enigma.halodev.dto.response.Response;
 import enigma.halodev.dto.response.SuccessResponse;
@@ -10,8 +11,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/users")
@@ -38,7 +44,7 @@ public class UserController {
             @PathVariable Long id,
             @Valid @RequestBody UserDTO dto
     ) {
-        return Response.success(userService.updateById(id, dto), "User Updated");
+        return Response.success(userService.updateById(id, dto), "User updated");
     }
 
     @DeleteMapping("/{id}")
@@ -47,5 +53,21 @@ public class UserController {
     ) {
         userService.deleteById(id);
         return Response.success("User deleted");
+    }
+
+    @PostMapping(consumes = "multipart/form-data", path = "/profile-picture")
+    public ResponseEntity<SuccessResponse<User>> uploadProfilePicture(
+            Authentication auth,
+            @RequestPart("image") MultipartFile image
+    ) throws IOException {
+        return Response.success(userService.uploadProfilePicture(auth, image), "Image uploaded", HttpStatus.OK);
+    }
+
+    @PostMapping("/top-up")
+    public ResponseEntity<SuccessResponse<topUpDto>> topUp(
+            Authentication auth,
+            @RequestBody topUpDto request
+    ) {
+        return Response.success(userService.topUp(auth, request.getAmount()));
     }
 }

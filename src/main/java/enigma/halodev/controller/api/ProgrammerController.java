@@ -1,6 +1,7 @@
 package enigma.halodev.controller.api;
 
 import enigma.halodev.dto.ProgrammerDTO;
+import enigma.halodev.dto.ProgrammerSkillsDTO;
 import enigma.halodev.dto.response.PageResponse;
 import enigma.halodev.dto.response.Response;
 import enigma.halodev.dto.response.SuccessResponse;
@@ -15,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 @RestController
 @RequestMapping("/api/programmers")
 @RequiredArgsConstructor
@@ -26,7 +29,7 @@ public class ProgrammerController {
             Authentication auth,
             @Valid @RequestBody ProgrammerDTO dto
     ) {
-        return Response.success(programmerService.create(auth, dto), "Programmer Created", HttpStatus.CREATED);
+        return Response.success(programmerService.create(auth, dto), "Programmer created", HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -43,12 +46,28 @@ public class ProgrammerController {
         return Response.success(programmerService.getById(id));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     public ResponseEntity<SuccessResponse<Programmer>> updateById(
-            @PathVariable Long id,
+            Authentication auth,
             @Valid @RequestBody ProgrammerDTO dto
     ) {
-        return Response.success(programmerService.updateById(id, dto), "Programmer Updated");
+        return Response.success(programmerService.updateById(auth, dto), "Programmer updated");
+    }
+
+    @PostMapping("/skills")
+    public ResponseEntity<SuccessResponse<Programmer>> addProgrammerSkill(
+            Authentication auth,
+            @Valid @RequestBody ProgrammerSkillsDTO dto
+            ) {
+        return Response.success(programmerService.addProgrammerSkill(auth, dto), "Programmer skills updated");
+    }
+
+    @DeleteMapping("/skills")
+    public ResponseEntity<SuccessResponse<Programmer>> removeProgrammerSkill(
+            Authentication auth,
+            @Valid @RequestBody ProgrammerSkillsDTO dto
+    ) {
+        return Response.success(programmerService.deleteProgrammerSkill(auth, dto), "Programmer skills deleted");
     }
 
     @DeleteMapping("/{id}")

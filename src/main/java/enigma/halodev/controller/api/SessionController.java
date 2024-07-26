@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,9 +23,10 @@ public class SessionController {
 
     @PostMapping
     public ResponseEntity<SuccessResponse<Session>> create(
+            Authentication auth,
             @Valid @RequestBody SessionDTO dto
     ) {
-        return Response.success(sessionService.create(dto), "Session Created", HttpStatus.CREATED);
+        return Response.success(sessionService.create(auth, dto), "Session created", HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -39,6 +41,13 @@ public class SessionController {
             @PathVariable Long id
     ) {
         return Response.success(sessionService.getById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<SuccessResponse<Session>> updateById(
+            @PathVariable Long id
+    ) {
+        return Response.success(sessionService.updateById(id));
     }
 
     @DeleteMapping("/{id}")

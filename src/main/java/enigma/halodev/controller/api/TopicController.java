@@ -8,10 +8,12 @@ import enigma.halodev.model.Topic;
 import enigma.halodev.service.TopicService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,7 +26,7 @@ public class TopicController {
     public ResponseEntity<SuccessResponse<Topic>> create(
             @Valid @RequestBody TopicDTO dto
     ) {
-        return Response.success(topicService.create(dto), "Topic Created", HttpStatus.CREATED);
+        return Response.success(topicService.create(dto), "Topic created", HttpStatus.CREATED);
     }
 
     @GetMapping

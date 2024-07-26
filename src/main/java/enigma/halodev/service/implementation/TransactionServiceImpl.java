@@ -1,11 +1,9 @@
 package enigma.halodev.service.implementation;
 
+import enigma.halodev.dto.TransactionDTO;
 import enigma.halodev.exception.TransactionNotFoundException;
-import enigma.halodev.model.PaymentStatus;
-import enigma.halodev.model.Session;
-import enigma.halodev.model.Transaction;
+import enigma.halodev.model.*;
 import enigma.halodev.repository.TransactionRepository;
-import enigma.halodev.service.SessionService;
 import enigma.halodev.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,15 +32,29 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Transaction updateById(Long id, Transaction request) {
-        Transaction foundTransaction = getById(id);
-        foundTransaction.setStatus(PaymentStatus.PAID);
+    public Transaction updateById(Long id, TransactionDTO updatedTransaction) {
+        Transaction newTransaction = getById(id);
+        newTransaction.setPaymentNominal(updatedTransaction.getPaymentNominal());
+        newTransaction.setRedirectUrl(updatedTransaction.getRedirectUrl());
 
-        return transactionRepository.save(foundTransaction);
+        return transactionRepository.save(newTransaction);
     }
 
     @Override
     public void deleteById(Long id) {
         transactionRepository.deleteById(id);
+    }
+
+    @Override
+    public Transaction toggleTransactionStatus(Long id) {
+        Transaction foundTransaction = getById(id);
+
+        if(foundTransaction.getStatus().equals(PaymentStatus.PAID)) {
+            foundTransaction.setStatus(PaymentStatus.UNPAID);
+        } else {
+            foundTransaction.setStatus(PaymentStatus.PAID);
+        }
+
+        return transactionRepository.save(foundTransaction);
     }
 }
