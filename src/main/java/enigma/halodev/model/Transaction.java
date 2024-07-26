@@ -24,10 +24,10 @@ public class Transaction {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @OneToOne
-    @JoinColumn(name = "session_id")
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     @JsonIgnore
-    private Session session;
+    private User user;
 
     @Column(nullable = false)
     private Double paymentNominal;

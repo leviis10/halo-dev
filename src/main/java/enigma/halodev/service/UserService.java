@@ -22,5 +22,7 @@ public interface UserService {
 
     void updateBalanceAfterTopUp(Long id, Double amount);
 
-    User updateBalanceAfterTransaction(User programmer, User user);
+    User updateBalanceUserAfterTransaction(User user);
+
+    User updateBalanceProgrammerAfterTransaction(User programmer);
 }

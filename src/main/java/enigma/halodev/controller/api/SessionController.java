@@ -43,6 +43,13 @@ public class SessionController {
         return Response.success(sessionService.getById(id));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<SuccessResponse<Session>> updateById(
+            @PathVariable Long id
+    ) {
+        return Response.success(sessionService.updateById(id));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<SuccessResponse<String>> deleteById(
             @PathVariable Long id

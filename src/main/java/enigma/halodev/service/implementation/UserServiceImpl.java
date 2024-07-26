@@ -56,8 +56,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateBalanceAfterTransaction(User programmer, User user) {
-        userRepository.save(user);
+    public User updateBalanceUserAfterTransaction(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User updateBalanceProgrammerAfterTransaction(User programmer) {
         return userRepository.save(programmer);
     }
 

@@ -36,26 +36,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Transaction updateById(Long id) {
-        // change status transaction
-        Transaction foundTransaction = getById(id);
-        foundTransaction.setStatus(PaymentStatus.PAID);
-
-        // change programmer availability after session done
-        Session foundSession = foundTransaction.getSession();
-        Programmer foundProgrammer = foundSession.getProgrammer();
-        programmerService.updateAvailability(foundProgrammer);
-
-        // reduce user (client) balance after session
-        User foundUser = foundSession.getUser();
-        foundUser.setBalance(foundUser.getBalance() - foundTransaction.getPaymentNominal());
-
-        // add payment to programmer balance
-        User foundUserProgrammer = foundProgrammer.getUser();
-        foundUserProgrammer.setBalance(foundUserProgrammer.getBalance() + foundTransaction.getPaymentNominal());
-
-        userService.updateBalanceAfterTransaction(foundUserProgrammer, foundUser);
-
-        return transactionRepository.save(foundTransaction);
+        return null;
     }
 
     @Override

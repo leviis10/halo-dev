@@ -53,7 +53,7 @@ public class User implements UserDetails {
     private Programmer programmer;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private List<Session> sessions;
+    private List<Transaction> transactions;
 
     // method from user details
     @Override

@@ -27,6 +27,9 @@ public class Session {
 //    @Lob
     private String description;
 
+    @Enumerated(EnumType.STRING)
+    private SessionStatus sessionStatus;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore
@@ -41,8 +44,4 @@ public class Session {
     @JoinColumn(name = "topic_id")
     @JsonIgnore
     private Topic topic;
-
-    // virtual
-    @OneToOne(mappedBy = "session", cascade = CascadeType.ALL)
-    private Transaction transaction;
 }

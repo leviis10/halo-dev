@@ -11,6 +11,8 @@ public interface SessionService {
 
     Page<Session> getAll(Pageable pageable);
 
+    Session updateById(Long id);
+
     Session getById(Long id);
 
     void deleteById(Long id);
