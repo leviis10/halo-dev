@@ -35,10 +35,9 @@ public class TransactionController {
 
     @PutMapping("/{id}")
     public ResponseEntity<SuccessResponse<Transaction>> updateById(
-            @PathVariable Long id,
-            @Valid @RequestBody Transaction request
+            @PathVariable Long id
     ) {
-        return Response.success(transactionService.updateById(id, request), "Transaction updated");
+        return Response.success(transactionService.updateById(id), "Transaction updated");
     }
 
     @DeleteMapping("/{id}")

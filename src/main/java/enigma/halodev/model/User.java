@@ -41,7 +41,7 @@ public class User implements UserDetails {
     private String password;
 
     @Column(nullable = false)
-    private Integer balance;
+    private Double balance;
 
     private String profilePicture;
 

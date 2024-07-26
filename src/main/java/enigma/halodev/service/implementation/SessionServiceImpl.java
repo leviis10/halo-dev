@@ -124,7 +124,7 @@ public class SessionServiceImpl implements SessionService {
         sessionRepository.deleteById(id);
     }
 
-    private void updateTransactionStatus(Long id, String orderId, Long userId, Integer amount) {
+    private void updateTransactionStatus(Long id, String orderId, Long userId, Double amount) {
         for (int i = 0; i < 20; i++) {
             try {
                 GetTransactionDetailResponse response = restClient
@@ -137,7 +137,7 @@ public class SessionServiceImpl implements SessionService {
                     Transaction foundTransaction = transactionRepository.findById(id).orElseThrow(null);
                     foundTransaction.setStatus(PaymentStatus.PAID);
                     transactionRepository.save(foundTransaction);
-                    userService.updateBalance(userId, amount);
+                    userService.updateBalanceAfterTopUp(userId, amount);
                     break;
                 }
                 Thread.sleep(3000);

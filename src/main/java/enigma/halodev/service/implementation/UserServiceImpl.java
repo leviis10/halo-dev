@@ -49,10 +49,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateBalance(Long id, Integer amount) {
+    public void updateBalanceAfterTopUp(Long id, Double amount) {
         User foundUser = getById(id);
         foundUser.setBalance(foundUser.getBalance() + amount);
         userRepository.save(foundUser);
+    }
+
+    @Override
+    public User updateBalanceAfterTransaction(User programmer, User user) {
+        userRepository.save(user);
+        return userRepository.save(programmer);
     }
 
     @Override
