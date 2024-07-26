@@ -19,5 +19,8 @@ public interface UserService {
     void deleteById(Long id);
 
     User uploadProfilePicture(Authentication auth, MultipartFile image) throws IOException;
-    void updateBalance(Long id, Double amount);
+
+    void updateBalanceAfterTopUp(Long id, Double amount);
+
+    User updateBalanceAfterTransaction(User programmer, User user);
 }

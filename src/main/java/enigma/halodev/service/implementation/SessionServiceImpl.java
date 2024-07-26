@@ -137,7 +137,7 @@ public class SessionServiceImpl implements SessionService {
                     Transaction foundTransaction = transactionRepository.findById(id).orElseThrow(null);
                     foundTransaction.setStatus(PaymentStatus.PAID);
                     transactionRepository.save(foundTransaction);
-                    userService.updateBalance(userId, amount);
+                    userService.updateBalanceAfterTopUp(userId, amount);
                     break;
                 }
                 Thread.sleep(3000);
