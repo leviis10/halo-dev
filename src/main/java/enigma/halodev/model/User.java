@@ -49,9 +49,11 @@ public class User implements UserDetails {
     private LocalDateTime createdAt;
 
     // virtual
+    @JsonIgnore
     @OneToOne(mappedBy = "user")
     private Programmer programmer;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Transaction> transactions;
 

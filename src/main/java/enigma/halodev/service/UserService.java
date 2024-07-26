@@ -1,6 +1,7 @@
 package enigma.halodev.service;
 
 import enigma.halodev.dto.UserDTO;
+import enigma.halodev.dto.UserDTO.topUpDto;
 import enigma.halodev.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,4 +26,6 @@ public interface UserService {
     User updateBalanceUserAfterTransaction(User user);
 
     User updateBalanceProgrammerAfterTransaction(User programmer);
+
+    topUpDto topUp(Authentication auth, Double amount);
 }
