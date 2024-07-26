@@ -1,5 +1,6 @@
 package enigma.halodev.controller.api;
 
+import enigma.halodev.dto.TransactionDTO;
 import enigma.halodev.dto.response.PageResponse;
 import enigma.halodev.dto.response.Response;
 import enigma.halodev.dto.response.SuccessResponse;
@@ -35,9 +36,10 @@ public class TransactionController {
 
     @PutMapping("/{id}")
     public ResponseEntity<SuccessResponse<Transaction>> updateById(
-            @PathVariable Long id
-    ) {
-        return Response.success(transactionService.updateById(id), "Transaction updated");
+            @PathVariable Long id,
+            @RequestBody @Valid TransactionDTO request
+            ) {
+        return Response.success(transactionService.updateById(id, request), "Transaction updated");
     }
 
     @DeleteMapping("/{id}")
@@ -46,5 +48,12 @@ public class TransactionController {
     ) {
         transactionService.deleteById(id);
         return Response.success("Transaction deleted");
+    }
+
+    @PostMapping("/{id}/toggle")
+    public ResponseEntity<SuccessResponse<Transaction>> toggleTransactionStatus(
+            @PathVariable Long id
+    ) {
+        return Response.success(transactionService.toggleTransactionStatus(id));
     }
 }

@@ -1,11 +1,10 @@
 package enigma.halodev.service.implementation;
 
+import enigma.halodev.dto.TransactionDTO;
 import enigma.halodev.exception.TransactionNotFoundException;
 import enigma.halodev.model.*;
 import enigma.halodev.repository.TransactionRepository;
-import enigma.halodev.service.ProgrammerService;
 import enigma.halodev.service.TransactionService;
-import enigma.halodev.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,8 +14,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
-    private final ProgrammerService programmerService;
-    private final UserService userService;
 
     @Override
     public Transaction create(Transaction request) {
@@ -35,31 +32,29 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Transaction updateById(Long id) {
-        // change status transaction
-        Transaction foundTransaction = getById(id);
-        foundTransaction.setStatus(PaymentStatus.PAID);
+    public Transaction updateById(Long id, TransactionDTO updatedTransaction) {
+        Transaction newTransaction = getById(id);
+        newTransaction.setPaymentNominal(updatedTransaction.getPaymentNominal());
+        newTransaction.setRedirectUrl(updatedTransaction.getRedirectUrl());
 
-        // change programmer availability after session done
-        Session foundSession = foundTransaction.getSession();
-        Programmer foundProgrammer = foundSession.getProgrammer();
-        programmerService.updateAvailability(foundProgrammer);
-
-        // reduce user (client) balance after session
-        User foundUser = foundSession.getUser();
-        foundUser.setBalance(foundUser.getBalance() - foundTransaction.getPaymentNominal());
-
-        // add payment to programmer balance
-        User foundUserProgrammer = foundProgrammer.getUser();
-        foundUserProgrammer.setBalance(foundUserProgrammer.getBalance() + foundTransaction.getPaymentNominal());
-
-        userService.updateBalanceAfterTransaction(foundUserProgrammer, foundUser);
-
-        return transactionRepository.save(foundTransaction);
+        return transactionRepository.save(newTransaction);
     }
 
     @Override
     public void deleteById(Long id) {
         transactionRepository.deleteById(id);
+    }
+
+    @Override
+    public Transaction toggleTransactionStatus(Long id) {
+        Transaction foundTransaction = getById(id);
+
+        if(foundTransaction.getStatus().equals(PaymentStatus.PAID)) {
+            foundTransaction.setStatus(PaymentStatus.UNPAID);
+        } else {
+            foundTransaction.setStatus(PaymentStatus.PAID);
+        }
+
+        return transactionRepository.save(foundTransaction);
     }
 }

@@ -1,6 +1,7 @@
 package enigma.halodev.service;
 
 import enigma.halodev.dto.UserDTO;
+import enigma.halodev.dto.UserDTO.topUpDto;
 import enigma.halodev.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +21,5 @@ public interface UserService {
 
     User uploadProfilePicture(Authentication auth, MultipartFile image) throws IOException;
 
-    void updateBalanceAfterTopUp(Long id, Double amount);
-
-    User updateBalanceAfterTransaction(User programmer, User user);
+    topUpDto topUp(Authentication auth, Double amount);
 }

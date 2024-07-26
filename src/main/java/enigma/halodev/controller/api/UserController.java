@@ -1,6 +1,7 @@
 package enigma.halodev.controller.api;
 
 import enigma.halodev.dto.UserDTO;
+import enigma.halodev.dto.UserDTO.topUpDto;
 import enigma.halodev.dto.response.PageResponse;
 import enigma.halodev.dto.response.Response;
 import enigma.halodev.dto.response.SuccessResponse;
@@ -55,9 +56,18 @@ public class UserController {
     }
 
     @PostMapping(consumes = "multipart/form-data", path = "/profile-picture")
-    public ResponseEntity<SuccessResponse<User>> uploadProfilePicture(Authentication auth,
+    public ResponseEntity<SuccessResponse<User>> uploadProfilePicture(
+            Authentication auth,
             @RequestPart("image") MultipartFile image
     ) throws IOException {
         return Response.success(userService.uploadProfilePicture(auth, image), "Image uploaded", HttpStatus.OK);
+    }
+
+    @PostMapping("/top-up")
+    public ResponseEntity<SuccessResponse<topUpDto>> topUp(
+            Authentication auth,
+            @RequestBody topUpDto request
+    ) {
+        return Response.success(userService.topUp(auth, request.getAmount()));
     }
 }

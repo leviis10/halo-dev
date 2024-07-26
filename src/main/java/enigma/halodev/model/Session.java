@@ -41,8 +41,4 @@ public class Session {
     @JoinColumn(name = "topic_id")
     @JsonIgnore
     private Topic topic;
-
-    // virtual
-    @OneToOne(mappedBy = "session", cascade = CascadeType.ALL)
-    private Transaction transaction;
 }
