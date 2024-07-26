@@ -41,7 +41,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
         ));
         convertedImage.delete();
 
-        return (String) uploadResult.get("url");
+        return (String) uploadResult.get("secure_url");
     }
 
     private static String getFileNameWithoutExtension(String url) {
