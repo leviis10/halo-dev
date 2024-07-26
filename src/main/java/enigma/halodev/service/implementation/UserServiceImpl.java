@@ -1,7 +1,11 @@
 package enigma.halodev.service.implementation;
 
 import com.cloudinary.Cloudinary;
+import com.cloudinary.EagerTransformation;
+import com.cloudinary.Transformation;
 import com.cloudinary.utils.ObjectUtils;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import enigma.halodev.dto.UserDTO;
 import enigma.halodev.exception.UserNotFoundException;
 import enigma.halodev.model.User;
@@ -17,6 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -56,15 +63,20 @@ public class UserServiceImpl implements UserService {
         User currentUser = (User) auth.getPrincipal();
 
         File convertedImage = ConvertMultipartToFile.convert(image);
+        Transformation transformation = new Transformation<>()
+                .gravity("face").height(100).width(100).crop("thumb").chain()
+                .radius("max").chain(); // radius max = rounded
         Map uploadResult = cloudinary.uploader().upload(convertedImage, ObjectUtils.asMap(
-                "overwrite", true, // Replace foto profil jika sudah ada sebelumnya
+                "transformation", transformation,
+                "overwrite", true,
                 "public_id", currentUser.getUsername() + "_" + currentUser.getId(),
                 "resource_type", "image",
+                "format", "webp",
                 "folder", "halodev/profile_picture"
         ));
-        currentUser.setProfilePicture(uploadResult.get("secure_url").toString());
         convertedImage.delete(); // Hapus gambar dari local setelah upload ke cloudinary
 
+        currentUser.setProfilePicture(uploadResult.get("secure_url").toString());
         return userRepository.save(currentUser);
     }
 }
