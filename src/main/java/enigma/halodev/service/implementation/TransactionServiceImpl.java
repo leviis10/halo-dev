@@ -2,7 +2,8 @@ package enigma.halodev.service.implementation;
 
 import enigma.halodev.dto.TransactionDTO;
 import enigma.halodev.exception.TransactionNotFoundException;
-import enigma.halodev.model.*;
+import enigma.halodev.model.PaymentStatus;
+import enigma.halodev.model.Transaction;
 import enigma.halodev.repository.TransactionRepository;
 import enigma.halodev.service.TransactionService;
 import lombok.RequiredArgsConstructor;

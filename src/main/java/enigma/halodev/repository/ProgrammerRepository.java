@@ -10,5 +10,6 @@ import java.util.Set;
 @Repository
 public interface ProgrammerRepository extends JpaRepository<Programmer, Long> {
     Programmer findByUserId(Long id);
+
     Set<Skill> deleteByIdIn(Set<Long> skillId);
 }
