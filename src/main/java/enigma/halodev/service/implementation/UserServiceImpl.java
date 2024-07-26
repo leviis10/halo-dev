@@ -1,18 +1,11 @@
 package enigma.halodev.service.implementation;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.EagerTransformation;
-import com.cloudinary.Transformation;
-import com.cloudinary.utils.ObjectUtils;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import enigma.halodev.dto.UserDTO;
 import enigma.halodev.exception.UserNotFoundException;
 import enigma.halodev.model.User;
 import enigma.halodev.repository.UserRepository;
 import enigma.halodev.service.CloudinaryService;
 import enigma.halodev.service.UserService;
-import enigma.halodev.utils.ConvertMultipartToFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,12 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
