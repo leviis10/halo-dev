@@ -15,10 +15,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TransactionBody {
     private TransactionDetails transaction_details;
-
     private CustomerDetails customer_details;
-
     private PageExpiry page_expiry;
-
     private List<String> enabled_payments;
 }

@@ -11,7 +11,6 @@ import enigma.halodev.repository.ProgrammerRepository;
 import enigma.halodev.service.ProgrammerService;
 import enigma.halodev.service.SkillService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -90,7 +89,12 @@ public class ProgrammerServiceImpl implements ProgrammerService {
 
     @Override
     public Programmer updateAvailability(Programmer request) {
-        return null;
+        if(request.getAvailability().equals(Availability.AVAILABLE)) {
+            request.setAvailability(Availability.NOT_AVAILABLE);
+        } else {
+            request.setAvailability(Availability.AVAILABLE);
+        }
+        return programmerRepository.save(request);
     }
 
     @Override

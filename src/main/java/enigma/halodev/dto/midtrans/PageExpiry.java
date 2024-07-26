@@ -13,6 +13,5 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PageExpiry {
     private Integer duration;
-
     private String unit;
 }

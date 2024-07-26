@@ -25,7 +25,6 @@ import java.util.concurrent.ExecutorService;
 @Slf4j
 public class SessionServiceImpl implements SessionService {
     private final SessionRepository sessionRepository;
-
     private final UserService userService;
     private final ProgrammerService programmerService;
     private final TopicService topicService;
@@ -35,9 +34,8 @@ public class SessionServiceImpl implements SessionService {
     @Value("${midtrans.serverkey}")
     private String midtransServerKey;
 
-    // DOnt forget to change Lepai
+    // Don't forget to change Lepai
     private final TransactionRepository transactionRepository;
-
 
     @Override
     public Session create(Authentication auth, SessionDTO dto) {
@@ -59,20 +57,22 @@ public class SessionServiceImpl implements SessionService {
                 .status(PaymentStatus.UNPAID)
                 .session(savedSession)
                 .build();
+
         transactionService.create(transaction);
         savedSession.setTransaction(transaction);
-
+        programmerService.updateAvailability(foundProgrammer);
 
         //midtrans
-
         TransactionDetails transactionDetails = TransactionDetails.builder()
                 .order_id(UUID.randomUUID().toString())
                 .gross_amount(foundProgrammer.getPrice())
                 .build();
+
         CustomerDetails customerDetails = CustomerDetails.builder()
                 .first_name(user.getFirstName())
                 .email(user.getEmail())
                 .build();
+
         PageExpiry pageExpiry = PageExpiry.builder()
                 .duration(5)
                 .unit("minutes")
@@ -91,22 +91,19 @@ public class SessionServiceImpl implements SessionService {
                 )
                 .retrieve()
                 .body(CreateTransactionResponse.class);
+
         if (response != null) {
             // create transaction with midtrans API and insert redirectUrl
             transaction.setRedirectUrl(response.getRedirect_url());
             transactionRepository.save(transaction);
         }
+
         executorService.submit(() -> updateTransactionStatus(
                 transaction.getId(),
                 transactionDetails.getOrder_id(),
                 user.getId(),
                 user.getBalance()
         ));
-
-
-
-
-
 
         return savedSession;
     }
