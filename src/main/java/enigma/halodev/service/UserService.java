@@ -13,5 +13,5 @@ public interface UserService {
     User updateById(Long id, UserDTO updatedUser);
 
     void deleteById(Long id);
-    void updateBalance(Long id, Integer amount);
+    void updateBalance(Long id, Double amount);
 }

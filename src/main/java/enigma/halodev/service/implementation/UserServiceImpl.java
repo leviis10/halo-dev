@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateBalance(Long id, Integer amount) {
+    public void updateBalance(Long id, Double amount) {
         User foundUser = getById(id);
         foundUser.setBalance(foundUser.getBalance() + amount);
         userRepository.save(foundUser);

@@ -41,7 +41,7 @@ public class User implements UserDetails {
     private String password;
 
     @Column(nullable = false)
-    private Integer balance;
+    private Double balance;
 
     private String profilePicture;
 
@@ -52,7 +52,7 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user")
     private Programmer programmer;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Session> sessions;
 
     // method from user details

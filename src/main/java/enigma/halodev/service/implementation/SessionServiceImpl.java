@@ -124,7 +124,7 @@ public class SessionServiceImpl implements SessionService {
         sessionRepository.deleteById(id);
     }
 
-    private void updateTransactionStatus(Long id, String orderId, Long userId, Integer amount) {
+    private void updateTransactionStatus(Long id, String orderId, Long userId, Double amount) {
         for (int i = 0; i < 20; i++) {
             try {
                 GetTransactionDetailResponse response = restClient
