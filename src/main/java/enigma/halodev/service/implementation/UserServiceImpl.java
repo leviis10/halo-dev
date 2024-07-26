@@ -4,17 +4,22 @@ import enigma.halodev.dto.UserDTO;
 import enigma.halodev.exception.UserNotFoundException;
 import enigma.halodev.model.User;
 import enigma.halodev.repository.UserRepository;
+import enigma.halodev.service.CloudinaryService;
 import enigma.halodev.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final CloudinaryService cloudinaryService;
 
     @Override
     public Page<User> getAll(Pageable pageable) {
@@ -48,5 +53,12 @@ public class UserServiceImpl implements UserService {
         User foundUser = getById(id);
         foundUser.setBalance(foundUser.getBalance() + amount);
         userRepository.save(foundUser);
+    }
+
+    @Override
+    public User uploadProfilePicture(Authentication auth, MultipartFile image) throws IOException {
+        User currentUser = (User) auth.getPrincipal();
+        currentUser.setProfilePicture(cloudinaryService.upload(currentUser, image));
+        return userRepository.save(currentUser);
     }
 }

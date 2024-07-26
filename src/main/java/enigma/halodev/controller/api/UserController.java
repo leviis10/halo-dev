@@ -10,11 +10,16 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -47,5 +52,12 @@ public class UserController {
     ) {
         userService.deleteById(id);
         return Response.success("User deleted");
+    }
+
+    @PostMapping(consumes = "multipart/form-data", path = "/profile-picture")
+    public ResponseEntity<SuccessResponse<User>> uploadProfilePicture(Authentication auth,
+            @RequestPart("image") MultipartFile image
+    ) throws IOException {
+        return Response.success(userService.uploadProfilePicture(auth, image), "Image uploaded", HttpStatus.OK);
     }
 }
