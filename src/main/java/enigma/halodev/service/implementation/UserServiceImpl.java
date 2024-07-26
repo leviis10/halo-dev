@@ -10,6 +10,7 @@ import enigma.halodev.dto.UserDTO;
 import enigma.halodev.exception.UserNotFoundException;
 import enigma.halodev.model.User;
 import enigma.halodev.repository.UserRepository;
+import enigma.halodev.service.CloudinaryService;
 import enigma.halodev.service.UserService;
 import enigma.halodev.utils.ConvertMultipartToFile;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final Cloudinary cloudinary;
+    private final CloudinaryService cloudinaryService;
 
     @Override
     public Page<User> getAll(Pageable pageable) {
@@ -61,22 +62,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User uploadProfilePicture(Authentication auth, MultipartFile image) throws IOException {
         User currentUser = (User) auth.getPrincipal();
-
-        File convertedImage = ConvertMultipartToFile.convert(image);
-        Transformation transformation = new Transformation<>()
-                .gravity("face").height(100).width(100).crop("thumb").chain()
-                .radius("max").chain(); // radius max = rounded
-        Map uploadResult = cloudinary.uploader().upload(convertedImage, ObjectUtils.asMap(
-                "transformation", transformation,
-                "overwrite", true,
-                "public_id", currentUser.getUsername() + "_" + currentUser.getId(),
-                "resource_type", "image",
-                "format", "webp",
-                "folder", "halodev/profile_picture"
-        ));
-        convertedImage.delete(); // Hapus gambar dari local setelah upload ke cloudinary
-
-        currentUser.setProfilePicture(uploadResult.get("secure_url").toString());
+        currentUser.setProfilePicture(cloudinaryService.upload(currentUser.getUsername(), image));
         return userRepository.save(currentUser);
     }
 }
