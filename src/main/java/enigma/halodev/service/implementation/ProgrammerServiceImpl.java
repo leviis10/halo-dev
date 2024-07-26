@@ -94,6 +94,7 @@ public class ProgrammerServiceImpl implements ProgrammerService {
         } else {
             request.setAvailability(Availability.AVAILABLE);
         }
+
         return programmerRepository.save(request);
     }
 
