@@ -46,7 +46,7 @@ public class SkillController {
             @PathVariable Long id,
             @Valid @RequestBody SkillDTO dto
     ) {
-        return Response.success(skillService.updateById(id, dto));
+        return Response.success(skillService.updateById(id, dto), "Skill Updated");
     }
 
     @DeleteMapping("/{id}")

@@ -37,7 +37,6 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public Topic updateById(Long id, TopicDTO dto) {
         Topic foundTopic = getById(id);
-
         foundTopic.setName(dto.getName());
 
         return topicRepository.save(foundTopic);

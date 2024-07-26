@@ -12,7 +12,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class TopicDTO {
+public class SessionDTO {
     @NotBlank(message = "Name must not be blank")
     private String name;
+
+    private String description;
+
+    @NotBlank(message = "User id must not be blank")
+    private Long userId;
+
+    @NotBlank(message = "Programmer id must not be blank")
+    private Long programmerId;
+
+    @NotBlank(message = "Topic id must not be blank")
+    private Long topicId;
 }

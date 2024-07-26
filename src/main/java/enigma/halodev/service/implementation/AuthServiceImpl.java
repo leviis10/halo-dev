@@ -31,6 +31,7 @@ public class AuthServiceImpl implements AuthService {
                 .balance(0)
                 .build();
         userRepository.save(user);
+
         return jwtUtils.generateToken(user.getUsername());
     }
 
