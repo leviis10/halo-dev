@@ -1,0 +1,39 @@
+ENDPOINT
+
+users table
+POST /api/auth/register
+POST /api/auth/login
+GET /api/users/me
+GET /api/users/sessions
+GET /api/users/sessions/{sessionId}
+GET /api/users/transactions
+GET /api/users/transactions/{transactionsId}
+PUT /api/users
+PATCH /api/users/password
+PATCH /api/users/topup
+PATCH /api/users/picture
+DELETE /api/users
+
+programmers table
+POST /api/programmers
+GET /api/programmers
+GET /api/programmers/me
+GET /api/programmers/{programmerId}
+PATCH /api/programmers/available
+PATCH /api/programmers/price
+PATCH /api/programmers/skills
+DELETE /api/programmers
+
+skills table
+POST /api/skills (ADMIN ONLY)
+GET /api/skills
+DELETE /api/skills/{skillId} (ADMIN ONLY)
+
+sessions table
+POST /api/sessions
+DELETE /api/sessions/{sessionId} (ADMIN ONLY)
+
+topics table
+POST /api/topics (ADMIN ONLY)
+GET /api/topics
+DELETE /api/topics/{topicId} (ADMIN ONLY)
