@@ -1,26 +1,25 @@
 package enigma.halodev.service;
 
 import enigma.halodev.dto.ProgrammerDTO;
-import enigma.halodev.dto.ProgrammerSkillsDTO;
 import enigma.halodev.model.Programmer;
+import enigma.halodev.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
 
 public interface ProgrammerService {
-    Programmer create(Authentication auth, ProgrammerDTO dto);
+    Programmer create(User user, ProgrammerDTO dto);
 
     Page<Programmer> getAll(Pageable pageable);
 
+    Programmer getCurrent(User user);
+
     Programmer getById(Long id);
 
-    Programmer updateById(Authentication auth, ProgrammerDTO dto);
+    Programmer updateAvailability(User user, ProgrammerDTO.ChangeAvailabilityDTO changeAvailabilityDTO);
 
-    Programmer deleteProgrammerSkill(Authentication auth, ProgrammerSkillsDTO dto);
+    Programmer updatePrice(User user, ProgrammerDTO.ChangePriceDTO changePriceDTO);
 
-    Programmer addProgrammerSkill(Authentication auth, ProgrammerSkillsDTO dto);
+    Programmer updateSkills(User user, ProgrammerDTO.ChangeSkillsDTO changeSkillsDTO);
 
-    Programmer updateAvailability(Programmer request);
-
-    void deleteById(Long id);
+    void deleteProgrammer(User user);
 }

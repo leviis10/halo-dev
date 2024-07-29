@@ -1,7 +1,8 @@
 package enigma.halodev.service;
 
 import enigma.halodev.dto.UserDTO;
-import enigma.halodev.dto.UserDTO.topUpDto;
+import enigma.halodev.dto.UserDTO.TopUpDto;
+import enigma.halodev.model.Transaction;
 import enigma.halodev.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,23 +10,26 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface UserService {
-    Page<User> getAll(Pageable pageable);
+    User getCurrentAuthenticatedUser(User user);
 
-    User getById(Long id);
+    Page<Transaction> getAllTransactions(Pageable pageable, User user);
 
-    User updateById(Long id, UserDTO updatedUser);
+    Transaction getTransactionById(User user, Long transactionsId);
 
-    void deleteById(Long id);
+    User updateUser(User user, UserDTO userDTO);
+
+    void changePassword(User user, UserDTO.ChangePasswordDTO changePasswordDTO);
+
+    Transaction topUp(User user, Double amount);
+
+    void delete(User user);
 
     User uploadProfilePicture(Authentication auth, MultipartFile image) throws IOException;
 
-    void updateBalanceAfterTopUp(Long id, Double amount);
+    void updateBalanceUserAfterTransaction(User user);
 
-    User updateBalanceUserAfterTransaction(User user);
-
-    User updateBalanceProgrammerAfterTransaction(User programmer);
-
-    topUpDto topUp(Authentication auth, Double amount);
+    void updateBalanceProgrammerAfterTransaction(User programmer);
 }

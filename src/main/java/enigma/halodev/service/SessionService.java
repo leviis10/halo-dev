@@ -2,18 +2,17 @@ package enigma.halodev.service;
 
 import enigma.halodev.dto.SessionDTO;
 import enigma.halodev.model.Session;
+import enigma.halodev.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 
 public interface SessionService {
-    Session create(Authentication auth, SessionDTO dto);
+    Session create(User user, SessionDTO dto);
 
-    Page<Session> getAll(Pageable pageable);
+    Page<Session> getAll(Pageable pageable, User user);
 
-    Session updateById(Long id);
+    Session getById(User user, Long sessionId);
 
-    Session getById(Long id);
-
-    void deleteById(Long id);
+    Session completeSession(User user, Long sessionId);
 }

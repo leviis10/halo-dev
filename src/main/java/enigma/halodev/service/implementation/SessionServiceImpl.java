@@ -1,5 +1,6 @@
 package enigma.halodev.service.implementation;
 
+import enigma.halodev.dto.ProgrammerDTO;
 import enigma.halodev.dto.SessionDTO;
 import enigma.halodev.exception.NotEnoughBalanceException;
 import enigma.halodev.exception.SessionNotFoundException;
@@ -16,9 +17,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class SessionServiceImpl implements SessionService {
     private final SessionRepository sessionRepository;
     private final UserService userService;
@@ -26,13 +28,20 @@ public class SessionServiceImpl implements SessionService {
     private final TopicService topicService;
 
     @Override
-    public Session create(Authentication auth, SessionDTO dto) {
-        User user = (User) auth.getPrincipal();
+    public Session create(User user, SessionDTO dto) {
         Programmer foundProgrammer = programmerService.getById(dto.getProgrammerId());
         Topic foundTopic = topicService.getById(dto.getTopicId());
 
-        if(user.getBalance() < foundProgrammer.getPrice()){
+        if (user.getProgrammer() != null && user.getProgrammer().equals(foundProgrammer)) {
+            throw new RuntimeException("Cannot create session with yourself");
+        }
+
+        if (user.getBalance() < foundProgrammer.getPrice()) {
             throw new NotEnoughBalanceException();
+        }
+
+        if (foundProgrammer.getAvailability().equals(Availability.NOT_AVAILABLE)) {
+            throw new RuntimeException("programmer is not available");
         }
 
         Session savedSession = sessionRepository.save(Session.builder()
@@ -41,12 +50,17 @@ public class SessionServiceImpl implements SessionService {
                 .user(user)
                 .programmer(foundProgrammer)
                 .topic(foundTopic)
-                .sessionStatus(SessionStatus.NOT_COMPLETED)
+                .completed(SessionStatus.NOT_COMPLETED)
                 .build()
         );
 
         // change programmer availability after session created
-        programmerService.updateAvailability(foundProgrammer);
+        programmerService.updateAvailability(
+                foundProgrammer.getUser(),
+                ProgrammerDTO.ChangeAvailabilityDTO.builder()
+                        .availability(Availability.NOT_AVAILABLE)
+                        .build()
+        );
 
         // reduce user (client) balance after session
         user.setBalance(user.getBalance() - foundProgrammer.getPrice());
@@ -61,30 +75,30 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public Page<Session> getAll(Pageable pageable) {
-        return sessionRepository.findAll(pageable);
+    public Page<Session> getAll(Pageable pageable, User user) {
+        return sessionRepository.findAllByUser(pageable, user);
     }
 
     @Override
-    public Session updateById(Long id) {
-        Session foundSession = getById(id);
-        foundSession.setSessionStatus(SessionStatus.COMPLETED);
+    public Session getById(User user, Long sessionId) {
+        return sessionRepository.findByUserAndId(user, sessionId)
+                .orElseThrow(SessionNotFoundException::new);
+    }
 
-        // change availability of programmer after session done
-        Programmer foundProgrammer = foundSession.getProgrammer();
-        programmerService.updateAvailability(foundProgrammer);
+    @Override
+    public Session completeSession(User user, Long sessionId) {
+        Session foundSession = getById(user, sessionId);
+        if (foundSession.getCompleted().equals(SessionStatus.COMPLETED)) {
+            throw new RuntimeException("Already completed");
+        }
 
+        programmerService.updateAvailability(
+                foundSession.getProgrammer().getUser(),
+                ProgrammerDTO.ChangeAvailabilityDTO.builder()
+                        .availability(Availability.AVAILABLE)
+                        .build()
+        );
+        foundSession.setCompleted(SessionStatus.COMPLETED);
         return sessionRepository.save(foundSession);
-    }
-
-    @Override
-    public Session getById(Long id) {
-        return sessionRepository.findById(id).
-                orElseThrow(SessionNotFoundException::new);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        sessionRepository.deleteById(id);
     }
 }

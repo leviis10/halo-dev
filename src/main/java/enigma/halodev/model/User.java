@@ -49,36 +49,41 @@ public class User implements UserDetails {
     private LocalDateTime createdAt;
 
     // virtual
-    @JsonIgnore
     @OneToOne(mappedBy = "user")
+    @JsonIgnore
     private Programmer programmer;
 
+    @OneToMany(mappedBy = "user")
     @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Transaction> transactions;
 
     // method from user details
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }

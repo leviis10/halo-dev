@@ -21,12 +21,8 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore
     private User user;
 
     @Column(nullable = false)
@@ -36,4 +32,7 @@ public class Transaction {
     private PaymentStatus status;
 
     private String redirectUrl;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 }

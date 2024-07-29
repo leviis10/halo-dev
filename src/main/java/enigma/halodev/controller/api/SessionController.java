@@ -1,20 +1,21 @@
 package enigma.halodev.controller.api;
 
 import enigma.halodev.dto.SessionDTO;
-import enigma.halodev.dto.response.PageResponse;
 import enigma.halodev.dto.response.Response;
 import enigma.halodev.dto.response.SuccessResponse;
 import enigma.halodev.model.Session;
+import enigma.halodev.model.User;
 import enigma.halodev.service.SessionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/sessions")
 @RequiredArgsConstructor
@@ -23,38 +24,17 @@ public class SessionController {
 
     @PostMapping
     public ResponseEntity<SuccessResponse<Session>> create(
-            Authentication auth,
+            @AuthenticationPrincipal User user,
             @Valid @RequestBody SessionDTO dto
     ) {
-        return Response.success(sessionService.create(auth, dto), "Session created", HttpStatus.CREATED);
+        return Response.success(sessionService.create(user, dto), "Session created", HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<PageResponse<Session>> getAll(
-            @PageableDefault Pageable pageable
+    @PatchMapping("/{sessionId}/complete")
+    public ResponseEntity<SuccessResponse<Session>> completeSession(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long sessionId
     ) {
-        return Response.page(sessionService.getAll(pageable));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<SuccessResponse<Session>> getById(
-            @PathVariable Long id
-    ) {
-        return Response.success(sessionService.getById(id));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<SuccessResponse<Session>> updateById(
-            @PathVariable Long id
-    ) {
-        return Response.success(sessionService.updateById(id));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<SuccessResponse<String>> deleteById(
-            @PathVariable Long id
-    ) {
-        sessionService.deleteById(id);
-        return Response.success("Session deleted");
+        return Response.success(sessionService.completeSession(user, sessionId));
     }
 }

@@ -1,11 +1,11 @@
 package enigma.halodev.controller.api;
 
 import enigma.halodev.dto.ProgrammerDTO;
-import enigma.halodev.dto.ProgrammerSkillsDTO;
 import enigma.halodev.dto.response.PageResponse;
 import enigma.halodev.dto.response.Response;
 import enigma.halodev.dto.response.SuccessResponse;
 import enigma.halodev.model.Programmer;
+import enigma.halodev.model.User;
 import enigma.halodev.service.ProgrammerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/programmers")
@@ -26,10 +24,10 @@ public class ProgrammerController {
 
     @PostMapping
     public ResponseEntity<SuccessResponse<Programmer>> create(
-            Authentication auth,
+            @AuthenticationPrincipal User user,
             @Valid @RequestBody ProgrammerDTO dto
     ) {
-        return Response.success(programmerService.create(auth, dto), "Programmer created", HttpStatus.CREATED);
+        return Response.success(programmerService.create(user, dto), "Programmer created", HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -39,6 +37,13 @@ public class ProgrammerController {
         return Response.page(programmerService.getAll(pageable));
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<SuccessResponse<Programmer>> getCurrentProgrammer(
+            @AuthenticationPrincipal User user
+    ) {
+        return Response.success(programmerService.getCurrent(user));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<SuccessResponse<Programmer>> getById(
             @PathVariable Long id
@@ -46,35 +51,36 @@ public class ProgrammerController {
         return Response.success(programmerService.getById(id));
     }
 
-    @PutMapping
-    public ResponseEntity<SuccessResponse<Programmer>> updateById(
-            Authentication auth,
-            @Valid @RequestBody ProgrammerDTO dto
+    @PatchMapping("/available")
+    public ResponseEntity<SuccessResponse<Programmer>> updateAvailability (
+            @AuthenticationPrincipal User user,
+            @Valid @RequestBody ProgrammerDTO.ChangeAvailabilityDTO changeAvailabilityDTO
     ) {
-        return Response.success(programmerService.updateById(auth, dto), "Programmer updated");
+        return Response.success(programmerService.updateAvailability(user, changeAvailabilityDTO));
     }
 
-    @PostMapping("/skills")
-    public ResponseEntity<SuccessResponse<Programmer>> addProgrammerSkill(
-            Authentication auth,
-            @Valid @RequestBody ProgrammerSkillsDTO dto
-            ) {
-        return Response.success(programmerService.addProgrammerSkill(auth, dto), "Programmer skills updated");
+    @PatchMapping("/price")
+    public ResponseEntity<SuccessResponse<Programmer>> updatePrice(
+            @AuthenticationPrincipal User user,
+            @Valid @RequestBody ProgrammerDTO.ChangePriceDTO changePriceDTO
+    ) {
+        return Response.success(programmerService.updatePrice(user, changePriceDTO));
     }
 
-    @DeleteMapping("/skills")
-    public ResponseEntity<SuccessResponse<Programmer>> removeProgrammerSkill(
-            Authentication auth,
-            @Valid @RequestBody ProgrammerSkillsDTO dto
+    @PatchMapping("/skills")
+    public ResponseEntity<SuccessResponse<Programmer>> updateSkill(
+            @AuthenticationPrincipal User user,
+            @Valid @RequestBody ProgrammerDTO.ChangeSkillsDTO changeSkillsDTO
+
     ) {
-        return Response.success(programmerService.deleteProgrammerSkill(auth, dto), "Programmer skills deleted");
+        return Response.success(programmerService.updateSkills(user, changeSkillsDTO));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<SuccessResponse<String>> deleteById(
-            @PathVariable Long id
+    @DeleteMapping
+    public ResponseEntity<?> deleteProgrammer(
+            @AuthenticationPrincipal User user
     ) {
-        programmerService.deleteById(id);
+        programmerService.deleteProgrammer(user);
         return Response.success("Programmer deleted");
     }
 }

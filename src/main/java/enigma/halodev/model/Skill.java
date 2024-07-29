@@ -24,7 +24,7 @@ public class Skill {
     private String name;
 
     // virtual
-    @ManyToMany(mappedBy = "skills", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "skills")
     @JsonIgnore
     private List<Programmer> programmers;
 }

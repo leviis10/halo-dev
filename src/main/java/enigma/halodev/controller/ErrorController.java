@@ -2,8 +2,7 @@ package enigma.halodev.controller;
 
 import enigma.halodev.dto.response.ErrorResponse;
 import enigma.halodev.dto.response.Response;
-import enigma.halodev.exception.SkillNotFoundException;
-import enigma.halodev.exception.TopicNotFoundException;
+import enigma.halodev.exception.*;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -11,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestControllerAdvice
@@ -39,5 +40,60 @@ public class ErrorController {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
         return Response.error(List.of(e.getMessage()), "Conflict", HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ErrorResponse> handleMaxSizeException(MaxUploadSizeExceededException exc) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                "File size exceeds limit of 1MB",
+                HttpStatus.PAYLOAD_TOO_LARGE.value(),
+                Collections.singletonList(exc.getMessage())
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.PAYLOAD_TOO_LARGE);
+    }
+
+    @ExceptionHandler(PasswordNotMatchException.class)
+    public ResponseEntity<ErrorResponse> handlePasswordNotMatchException(PasswordNotMatchException e) {
+        return Response.error(
+                List.of(e.getMessage()),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException e) {
+        return Response.error(
+                List.of(e.getMessage()),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    @ExceptionHandler(TransactionNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleTransactionNotFoundException(TransactionNotFoundException e) {
+        return Response.error(
+                List.of(e.getMessage()),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    @ExceptionHandler(SessionNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleSessionNotFoundException(SessionNotFoundException e) {
+        return Response.error(
+                List.of(e.getMessage()),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    @ExceptionHandler(NotEnoughBalanceException.class)
+    public ResponseEntity<ErrorResponse> handleNotEnoughBalanceException(NotEnoughBalanceException e) {
+        return Response.error(
+                List.of(e.getMessage()),
+                HttpStatus.PAYMENT_REQUIRED.getReasonPhrase(),
+                HttpStatus.PAYMENT_REQUIRED
+        );
     }
 }

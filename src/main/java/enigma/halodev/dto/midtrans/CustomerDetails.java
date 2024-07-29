@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CustomerDetails {
     private String first_name;
+
+    private String last_name;
+
     private String email;
-    private String phone;
 }

@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -18,28 +21,27 @@ public class Session {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
-//    @Lob
-    private String description;
-
-    @Enumerated(EnumType.STRING)
-    private SessionStatus sessionStatus;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "programmer_id")
-    @JsonIgnore
     private Programmer programmer;
 
     @ManyToOne
     @JoinColumn(name = "topic_id")
-    @JsonIgnore
     private Topic topic;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private String description;
+
+    @Enumerated(EnumType.STRING)
+    private SessionStatus completed;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 }

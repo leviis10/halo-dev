@@ -23,7 +23,6 @@ public class Programmer {
 
     @OneToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore
     private User user;
 
     @Enumerated(EnumType.STRING)
@@ -32,7 +31,7 @@ public class Programmer {
     @Column(nullable = false)
     private Double price;
 
-    // virtual row
+    // virtual
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "programmers_skills",
@@ -41,6 +40,7 @@ public class Programmer {
     )
     private Set<Skill> skills;
 
-    @OneToMany(mappedBy = "programmer", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "programmer")
+    @JsonIgnore
     private List<Session> sessions;
 }

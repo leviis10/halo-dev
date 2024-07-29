@@ -2,10 +2,16 @@
 
 Future of on-demand programming services
 
-## spotted todo
+## Todo Improvement
 
-- move configuration on application to config directory
-- move GlobalExceptionHandler on exception directory to controller/ErrorController
+- RBAC
+- on user controller there is still todo list
+- change RuntimeException to be meaningful exception
+- on UserServiceImpl there is some todo list
+
+## note
+
+- maybe there is so many lazy initialization bug
 
 ## Before Run
 
