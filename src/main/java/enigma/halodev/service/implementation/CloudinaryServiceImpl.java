@@ -23,8 +23,8 @@ public class CloudinaryServiceImpl implements CloudinaryService {
     @Override
     public String upload(User user, MultipartFile image) throws IOException {
         String publicId = "";
-        if(user.getProfilePicture() != null) {
-           publicId = getFileNameWithoutExtension(user.getProfilePicture());
+        if (user.getProfilePicture() != null) {
+            publicId = getFileNameWithoutExtension(user.getProfilePicture());
         }
 
         File convertedImage = ConvertMultipartToFile.convert(image);

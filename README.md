@@ -7,13 +7,10 @@ Future of on-demand programming services
 - RBAC
 - change RuntimeException to be meaningful exception
 
-## note
-
-- maybe there is so many lazy initialization bug
-
 ## Before Run
 
 1. set environment for:
+    - SERVER_PORT 
     - DB_HOST
     - DB_PORT
     - DB_NAME
@@ -25,7 +22,7 @@ Future of on-demand programming services
     - CLOUDINARY_API_SECRET
     - CLOUDINARY_CLOUD_NAME
     - MIDTRANS_SERVER_KEY
-2. That it
+2. Thats it
 
 ## Endpoint
 
