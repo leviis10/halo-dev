@@ -42,7 +42,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void updateStatus(User user, Long id, PaymentStatus paymentStatus) {
         Transaction foundTransaction = getById(user, id);
-        foundTransaction.setStatus(PaymentStatus.PAID);
+        foundTransaction.setStatus(paymentStatus);
         transactionRepository.save(foundTransaction);
     }
 }

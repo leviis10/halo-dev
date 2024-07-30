@@ -28,7 +28,7 @@ public class SessionServiceImpl implements SessionService {
         Programmer foundProgrammer = programmerService.getById(dto.getProgrammerId());
         Topic foundTopic = topicService.getById(dto.getTopicId());
 
-        if (user.getProgrammer() != null && user.getProgrammer().equals(foundProgrammer)) {
+        if (user.getId().equals(foundProgrammer.getUser().getId())) {
             throw new RuntimeException("Cannot create session with yourself");
         }
 
