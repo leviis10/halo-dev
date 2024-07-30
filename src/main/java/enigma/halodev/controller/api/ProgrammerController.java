@@ -52,7 +52,7 @@ public class ProgrammerController {
     }
 
     @PatchMapping("/available")
-    public ResponseEntity<SuccessResponse<Programmer>> updateAvailability (
+    public ResponseEntity<SuccessResponse<Programmer>> updateAvailability(
             @AuthenticationPrincipal User user,
             @Valid @RequestBody ProgrammerDTO.ChangeAvailabilityDTO changeAvailabilityDTO
     ) {

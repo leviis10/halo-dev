@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import enigma.halodev.model.Availability;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 

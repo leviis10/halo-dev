@@ -5,7 +5,6 @@ import enigma.halodev.model.Session;
 import enigma.halodev.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
 
 public interface SessionService {
     Session create(User user, SessionDTO dto);
