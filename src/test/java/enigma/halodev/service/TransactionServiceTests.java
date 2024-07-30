@@ -1,7 +1,6 @@
 package enigma.halodev.service;
 
 import enigma.halodev.dto.TransactionDTO;
-import enigma.halodev.exception.TopicNotFoundException;
 import enigma.halodev.exception.TransactionNotFoundException;
 import enigma.halodev.model.PaymentStatus;
 import enigma.halodev.model.Transaction;
