@@ -1,5 +1,6 @@
 package enigma.halodev.service;
 
+import enigma.halodev.exception.TopicNotFoundException;
 import enigma.halodev.model.Topic;
 import enigma.halodev.repository.TopicRepository;
 import enigma.halodev.service.implementation.TopicServiceImpl;
@@ -18,6 +19,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
@@ -28,7 +30,7 @@ public class TopicServiceTests {
     private TopicRepository topicRepository;
 
     @InjectMocks
-    private TopicServiceImpl topicServiceImpl;
+    private TopicServiceImpl topicService;
 
     private final Long topicId = 1L;
     private Topic topic;
@@ -49,7 +51,7 @@ public class TopicServiceTests {
         when(topicRepository.findAll(pageable)).thenReturn(topics);
 
         // when
-        Page<Topic> result = topicServiceImpl.getAll(pageable);
+        Page<Topic> result = topicService.getAll(pageable);
 
         // then
         assertEquals(topics, result);
@@ -62,10 +64,26 @@ public class TopicServiceTests {
          when(topicRepository.findById(topicId)).thenReturn(Optional.of(topic));
 
          // When
-         Topic result = topicServiceImpl.getById(topicId);
+         Topic result = topicService.getById(topicId);
 
          // Then
          assertEquals(topic, result);
          verify(topicRepository, times(1)).findById(topicId);
+    }
+
+    @Test
+    void getById_fail(){
+        // given
+        Long nonExistentTopicId = 99L;
+        topic.setId(nonExistentTopicId);
+
+        // when
+        when(topicRepository.findById(nonExistentTopicId)).thenReturn(Optional.empty());
+
+        // then
+        assertThatThrownBy(() -> topicService.getById(nonExistentTopicId))
+                .isInstanceOf(TopicNotFoundException.class)
+                .hasMessageContaining("Topic not found");
+        verify(topicRepository, times(1)).findById(nonExistentTopicId);
     }
 }
