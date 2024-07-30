@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -52,7 +53,7 @@ public class TopicControllerTests {
     private Topic topic;
 
     @BeforeEach
-    public void beforeEach() throws Exception {
+    public void setUp() throws Exception {
         topic = Topic.builder()
                 .id(topicId)
                 .name("Test Item")
@@ -88,7 +89,7 @@ public class TopicControllerTests {
         RequestBuilder request = get("/api/topics").header("Authorization", "Bearer " + jwtToken);
         mockMvc.perform(request)
                 .andExpect(status().isOk())
-                .andExpect(content().json("{}"))
-                .andDo(print());
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json("{\"message\"=\"OK\",\"status\"=200,\"data\":[{\"id\":1,\"name\":\"Test Item\"}],\"totalPages\":1,\"totalElements\":1,\"page\":0,\"size\":10}"));
     }
 }
