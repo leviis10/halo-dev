@@ -9,7 +9,8 @@ import org.junit.platform.suite.api.Suite;
         enigma.halodev.service.SkillServiceTests.class,
         enigma.halodev.repository.SkillRepositoryTests.class,
         enigma.halodev.controller.SkillControllerTests.class,
-        enigma.halodev.service.TransactionServiceTests.class
+        enigma.halodev.service.TransactionServiceTests.class,
+        enigma.halodev.service.ProgrammmerServiceTests.class
 })
 
 public class TestSuite {

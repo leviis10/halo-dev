@@ -66,10 +66,7 @@ public class ProgrammerServiceImpl implements ProgrammerService {
     }
 
     @Override
-    public Programmer updatePrice(
-            User user,
-            ProgrammerDTO.ChangePriceDTO changePriceDTO
-    ) {
+    public Programmer updatePrice(User user, ProgrammerDTO.ChangePriceDTO changePriceDTO) {
         Programmer currentProgrammer = getCurrent(user);
         user.getProgrammer().setPrice(changePriceDTO.getPrice());
         return programmerRepository.save(currentProgrammer);
