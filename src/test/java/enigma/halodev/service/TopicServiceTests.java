@@ -15,13 +15,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,7 +34,7 @@ public class TopicServiceTests {
     private Topic topic;
 
     @BeforeEach
-    void setUp(){
+    void beforeEach(){
         // init topic
         topic = new Topic();
         topic.setId(topicId);
@@ -44,7 +42,7 @@ public class TopicServiceTests {
     }
 
     @Test
-    void getAllTopic(){
+    void TopicService_GetAllTopics_ReturnAllTopics(){
         // given
         Pageable pageable = PageRequest.of(0, 10);
         Page<Topic> topics = new PageImpl<>(Collections.singletonList(topic), pageable, 1);
@@ -59,7 +57,7 @@ public class TopicServiceTests {
     }
 
     @Test
-    void getByIdTopic(){
+    void TopicService_GetTopicById_ReturnSpecificTopic(){
          // given
          when(topicRepository.findById(topicId)).thenReturn(Optional.of(topic));
 
@@ -72,7 +70,7 @@ public class TopicServiceTests {
     }
 
     @Test
-    void getById_fail(){
+    void TopicService_GetTopicById_ThrowsExceptionWhenTopicNotFound(){
         // given
         Long nonExistentTopicId = 99L;
         topic.setId(nonExistentTopicId);

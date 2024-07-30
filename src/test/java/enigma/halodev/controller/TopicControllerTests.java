@@ -29,10 +29,8 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.Collections;
 import java.util.Date;
 
-import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(TopicController.class)
@@ -53,7 +51,7 @@ public class TopicControllerTests {
     private Topic topic;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void beforeEach() throws Exception {
         topic = Topic.builder()
                 .id(topicId)
                 .name("Test Item")
@@ -77,7 +75,7 @@ public class TopicControllerTests {
     }
 
     @Test
-    void getAllTopic() throws Exception {
+    void TopicController_GetAll_ReturnAllTopics() throws Exception {
         // given
         Pageable pageable = PageRequest.of(0, 10);
         Page<Topic> topics = new PageImpl<>(Collections.singletonList(topic), pageable, 1);
