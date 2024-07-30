@@ -8,6 +8,7 @@ import enigma.halodev.model.Session;
 import enigma.halodev.model.Transaction;
 import enigma.halodev.model.User;
 import enigma.halodev.service.SessionService;
+import enigma.halodev.service.TransactionService;
 import enigma.halodev.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ import java.io.IOException;
 public class UserController {
     private final UserService userService;
     private final SessionService sessionService;
+    private final TransactionService transactionService;
 
     @GetMapping("/me")
     public ResponseEntity<SuccessResponse<User>> getCurrentAuthenticatedUser(
@@ -57,8 +59,7 @@ public class UserController {
             @AuthenticationPrincipal User user,
             @PageableDefault Pageable pageable
     ) {
-        // TODO use transactionService
-        return Response.page(userService.getAllTransactions(pageable, user));
+        return Response.page(transactionService.getAllByUserId(pageable, user));
     }
 
     @GetMapping("/transactions/{transactionsId}")
@@ -66,8 +67,7 @@ public class UserController {
             @AuthenticationPrincipal User user,
             @PathVariable Long transactionsId
     ) {
-        // TODO user transactionService
-        return Response.success(userService.getTransactionById(user, transactionsId));
+        return Response.success(transactionService.getById(user, transactionsId));
     }
 
     @PutMapping

@@ -2,6 +2,7 @@ package enigma.halodev.service;
 
 import enigma.halodev.dto.UserDTO;
 import enigma.halodev.dto.UserDTO.TopUpDto;
+import enigma.halodev.model.Programmer;
 import enigma.halodev.model.Transaction;
 import enigma.halodev.model.User;
 import org.springframework.data.domain.Page;
@@ -15,10 +16,6 @@ import java.util.List;
 public interface UserService {
     User getCurrentAuthenticatedUser(User user);
 
-    Page<Transaction> getAllTransactions(Pageable pageable, User user);
-
-    Transaction getTransactionById(User user, Long transactionsId);
-
     User updateUser(User user, UserDTO userDTO);
 
     void changePassword(User user, UserDTO.ChangePasswordDTO changePasswordDTO);
@@ -29,7 +26,7 @@ public interface UserService {
 
     User uploadProfilePicture(Authentication auth, MultipartFile image) throws IOException;
 
-    void updateBalanceUserAfterTransaction(User user);
+    void chargeUserAfterTransaction(User user, Double amount);
 
-    void updateBalanceProgrammerAfterTransaction(User programmer);
+    void addProgrammerBalanceAfterTransaction(Programmer foundProgrammer, Double amount);
 }

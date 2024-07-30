@@ -1,6 +1,7 @@
 package enigma.halodev.service;
 
 import enigma.halodev.dto.TransactionDTO;
+import enigma.halodev.model.PaymentStatus;
 import enigma.halodev.model.Transaction;
 import enigma.halodev.model.User;
 import org.springframework.data.domain.Page;
@@ -12,4 +13,6 @@ public interface TransactionService {
     Page<Transaction> getAllByUserId(Pageable pageable, User user);
 
     Transaction getById(User user, Long id);
+
+    void updateStatus(User user, Long id, PaymentStatus paymentStatus);
 }

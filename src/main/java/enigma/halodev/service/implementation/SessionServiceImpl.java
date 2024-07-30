@@ -63,13 +63,10 @@ public class SessionServiceImpl implements SessionService {
         );
 
         // reduce user (client) balance after session
-        user.setBalance(user.getBalance() - foundProgrammer.getPrice());
-        userService.updateBalanceUserAfterTransaction(user);
+        userService.chargeUserAfterTransaction(user, foundProgrammer.getPrice());
 
         // add payment to programmer balance
-        User foundUserProgrammer = foundProgrammer.getUser();
-        foundUserProgrammer.setBalance(foundUserProgrammer.getBalance() + foundProgrammer.getPrice());
-        userService.updateBalanceProgrammerAfterTransaction(foundUserProgrammer);
+        userService.addProgrammerBalanceAfterTransaction(foundProgrammer, foundProgrammer.getPrice());
 
         return savedSession;
     }

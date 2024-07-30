@@ -40,4 +40,11 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionRepository.findByUserAndId(user, id).
                 orElseThrow(TransactionNotFoundException::new);
     }
+
+    @Override
+    public void updateStatus(User user, Long id, PaymentStatus paymentStatus) {
+        Transaction foundTransaction = getById(user, id);
+        foundTransaction.setStatus(PaymentStatus.PAID);
+        transactionRepository.save(foundTransaction);
+    }
 }

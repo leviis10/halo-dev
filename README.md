@@ -5,9 +5,7 @@ Future of on-demand programming services
 ## Todo Improvement
 
 - RBAC
-- on user controller there is still todo list
 - change RuntimeException to be meaningful exception
-- on UserServiceImpl there is some todo list
 
 ## note
 

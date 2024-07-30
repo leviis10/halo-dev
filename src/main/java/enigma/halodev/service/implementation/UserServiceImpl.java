@@ -2,26 +2,18 @@ package enigma.halodev.service.implementation;
 
 import enigma.halodev.dto.TransactionDTO;
 import enigma.halodev.dto.UserDTO;
-import enigma.halodev.dto.UserDTO.TopUpDto;
 import enigma.halodev.dto.midtrans.*;
 import enigma.halodev.exception.PasswordNotMatchException;
-import enigma.halodev.exception.TransactionNotFoundException;
-import enigma.halodev.exception.UserNotFoundException;
 import enigma.halodev.model.PaymentStatus;
+import enigma.halodev.model.Programmer;
 import enigma.halodev.model.Transaction;
 import enigma.halodev.model.User;
-import enigma.halodev.repository.TransactionRepository;
 import enigma.halodev.repository.UserRepository;
 import enigma.halodev.service.CloudinaryService;
 import enigma.halodev.service.TransactionService;
 import enigma.halodev.service.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,13 +23,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final TransactionService transactionService;
@@ -49,22 +39,9 @@ public class UserServiceImpl implements UserService {
     @Value("${midtrans.serverkey}")
     private String midtransServerKey;
 
-    // TODO change TransactionRepository with TransactionService
-    private final TransactionRepository transactionRepository;
-
     @Override
     public User getCurrentAuthenticatedUser(User user) {
         return user;
-    }
-
-    @Override
-    public Page<Transaction> getAllTransactions(Pageable pageable, User user) {
-        return transactionService.getAllByUserId(pageable, user);
-    }
-
-    @Override
-    public Transaction getTransactionById(User user, Long transactionsId) {
-        return transactionService.getById(user, transactionsId);
     }
 
     @Override
@@ -170,16 +147,8 @@ public class UserServiceImpl implements UserService {
                         .body(GetTransactionDetailResponse.class);
 
                 if (response != null && "capture".equals(response.getTransaction_status())) {
-//                    Transaction foundTransaction = transactionRepository.findById(transactionId)
-//                            .orElseThrow(TransactionNotFoundException::new);
-                    Transaction foundTransaction = transactionService.getById(user, transactionId);
-                    // TODO create updateStatus in transactionService
-                    foundTransaction.setStatus(PaymentStatus.PAID);
-                    transactionRepository.save(foundTransaction);
-
-                    // TODO create updateBalance in this service
-                    user.setBalance(user.getBalance() + amount);
-                    userRepository.save(user);
+                    transactionService.updateStatus(user, transactionId, PaymentStatus.PAID);
+                    addBalanceAfterTransaction(user, amount);
                     break;
                 }
                 Thread.sleep(3000);
@@ -189,15 +158,21 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    // TODO update to more meaning method
-    @Override
-    public void updateBalanceUserAfterTransaction(User user) {
+    private void addBalanceAfterTransaction(User user, Double amount) {
+        user.setBalance(user.getBalance() + amount);
         userRepository.save(user);
     }
 
-    // TODO update to more meaning method
     @Override
-    public void updateBalanceProgrammerAfterTransaction(User programmer) {
-        userRepository.save(programmer);
+    public void chargeUserAfterTransaction(User user, Double amount) {
+        user.setBalance(user.getBalance() - amount);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void addProgrammerBalanceAfterTransaction(Programmer foundProgrammer, Double amount) {
+        User foundUserProgrammer = foundProgrammer.getUser();
+        foundUserProgrammer.setBalance(foundUserProgrammer.getBalance() + amount);
+        userRepository.save(foundUserProgrammer);
     }
 }
