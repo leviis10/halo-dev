@@ -58,8 +58,9 @@ public class TopicControllerTests {
                 .build();
 
         jwtToken = Jwts.builder()
-                .setSubject("test")
-                .setExpiration(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
+                .subject("test")
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
                 .signWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey)))
                 .compact();
 

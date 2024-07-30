@@ -30,6 +30,9 @@ public class AuthServiceTests {
     private JwtUtils jwtUtils;
 
     @Mock
+    PasswordEncoder passwordEncoder;
+
+    @Mock
     private AuthenticationManager authenticationManager;
 
     @InjectMocks
