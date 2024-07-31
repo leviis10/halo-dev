@@ -130,7 +130,7 @@ public class TransactionServiceTests {
     }
 
     @Test
-    void TransactionService_UpdateTransactionStatus_ShouldThrowExceptionWhenTransactionNotFound() {
+    void TransactionService_UpdateTransactionStatus_ThrowsExceptionWhenTransactionNotFound() {
         // given
         Long nonExistentTransactionId = 99L;
         PaymentStatus newStatus = PaymentStatus.PAID;

@@ -22,6 +22,7 @@ public class UserDTO {
     private String email;
 
     @Getter
+    @Setter
     public static class ChangePasswordDTO {
         @NotBlank
         private String oldPassword;

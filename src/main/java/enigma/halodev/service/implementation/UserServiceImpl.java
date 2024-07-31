@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(User user, UserDTO userDTO) {
         user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
+        user.setLastName(userDTO.getLastName() != null ? userDTO.getLastName() : user.getLastName());
         user.setEmail(userDTO.getEmail());
         return userRepository.save(user);
     }
@@ -99,7 +99,6 @@ public class UserServiceImpl implements UserService {
         if (response == null) {
             throw new RuntimeException("Something went wrong");
         }
-
 
         // create transaction with midtrans API and insert redirectUrl
         Transaction savedTransaction = transactionService.create(user, TransactionDTO.builder()

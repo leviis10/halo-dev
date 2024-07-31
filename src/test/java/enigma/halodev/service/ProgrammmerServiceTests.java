@@ -1,6 +1,7 @@
 package enigma.halodev.service;
 
 import enigma.halodev.dto.ProgrammerDTO;
+import enigma.halodev.exception.UserNotFoundException;
 import enigma.halodev.model.*;
 import enigma.halodev.repository.ProgrammerRepository;
 import enigma.halodev.service.implementation.ProgrammerServiceImpl;
@@ -9,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -198,5 +199,32 @@ public class ProgrammmerServiceTests {
         verify(programmerRepository, times(1)).delete(mockedProgrammer);
         Optional<Programmer> deletedTransaction = programmerRepository.findById(programmerId);
         assertThat(deletedTransaction).isEmpty();
+    }
+
+    @Test
+    void ProgrammerService_GetCurrentProgrammer_ThrowsUserNotFoundException() {
+        // When
+        when(mockedUser.getProgrammer()).thenReturn(null);
+
+        // then
+        assertThatThrownBy(() -> programmerService.getCurrent(mockedUser))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessageContaining("User not found");
+    }
+
+    @Test
+    void ProgrammerService_GetByIdProgrammer_ThrowsUserNotFoundException(){
+        // given
+        Long nonExistentProgrammerId = 99L;
+        mockedProgrammer.setId(nonExistentProgrammerId);
+
+        // When
+        when(programmerRepository.findById(nonExistentProgrammerId)).thenReturn(Optional.empty());
+
+        // then
+        assertThatThrownBy(() -> programmerService.getById(nonExistentProgrammerId))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessageContaining("User not found");
+        verify(programmerRepository, times(1)).findById(nonExistentProgrammerId);
     }
 }
