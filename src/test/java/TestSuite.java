@@ -16,6 +16,7 @@ import org.junit.platform.suite.api.Suite;
         SkillRepositoryTests.class,
         SkillControllerTests.class,
         TransactionServiceTests.class,
+        SessionServiceTests.class,
         ProgrammmerServiceTests.class,
         AuthServiceTests.class,
         UserServiceTests.class,
