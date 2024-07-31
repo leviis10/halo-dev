@@ -96,4 +96,13 @@ public class ErrorController {
                 HttpStatus.PAYMENT_REQUIRED
         );
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorResponse> handleAnyRuntimeException(RuntimeException e) {
+        return Response.error(
+                List.of(e.getMessage()),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                HttpStatus.BAD_REQUEST
+        );
+    }
 }
