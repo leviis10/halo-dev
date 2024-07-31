@@ -32,5 +32,4 @@ public class AuthController {
     ) {
         return Response.success(authService.login(dto));
     }
-
 }

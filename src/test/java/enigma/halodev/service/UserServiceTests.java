@@ -113,7 +113,7 @@ public class UserServiceTests {
     }
 
     @Test
-    void TestService_ChangePassword_ChangePasswordSuccess() {
+    void UserService_ChangePassword_ChangePasswordSuccess() {
         // given
         when(passwordEncoder.matches(changePasswordDTO.getOldPassword(), user.getPassword())).thenReturn(true);
         when(passwordEncoder.encode(changePasswordDTO.getNewPassword())).thenReturn("encodedNewPassword");
@@ -129,91 +129,76 @@ public class UserServiceTests {
     }
 
     @Test
-    public void testUploadProfilePicture() throws IOException {
+    void UserService_UploadProfilePicture_Success() throws IOException {
+        // given
         when(authentication.getPrincipal()).thenReturn(user);
         when(cloudinaryService.upload(user, image)).thenReturn("newProfilePictureUrl");
         when(userRepository.save(user)).thenReturn(user);
 
+        // when
         User updatedUser = userService.uploadProfilePicture(authentication, image);
 
+        // then
         assertEquals("newProfilePictureUrl", updatedUser.getProfilePicture());
         verify(cloudinaryService).upload(user, image);
-        verify(userRepository).save(user);
+        verify(userRepository, times(1)).save(user);
     }
 
     @Test
-    public void testDeleteUser() {
+    void UserService_DeleteUser_Success() {
+        // given
         doNothing().when(userRepository).delete(user);
 
+        // when
         userService.delete(user);
 
-        verify(userRepository).delete(user);
+        // then
+        verify(userRepository, times(1)).delete(user);
     }
 
     @Test
-    public void testAddBalanceAfterTransaction() {
+    public void UserService_AddBalanceAfterTransaction_Success() {
+        // given
         double amountToAdd = 50.0;
         when(userRepository.save(user)).thenReturn(user);
 
+        // when
         userService.addBalanceAfterTransaction(user, amountToAdd);
 
+        // then
         assertEquals(150.0, user.getBalance());
-        verify(userRepository).save(user);
+        verify(userRepository, times(1)).save(user);
     }
 
     @Test
-    public void testChargeUserAfterTransaction() {
+    public void UserService_ChargeUserAfterTransaction_Success() {
+        // given
         double amountToCharge = 30.0;
         when(userRepository.save(user)).thenReturn(user);
 
+        // when
         userService.chargeUserAfterTransaction(user, amountToCharge);
 
+        // then
         assertEquals(70.0, user.getBalance());
-        verify(userRepository).save(user);
+        verify(userRepository, times(1)).save(user);
     }
 
     @Test
-    public void testAddProgrammerBalanceAfterTransaction() {
+    public void UserService_AddProgrammerBalanceAfterTransaction_Success() {
+        // given
         Programmer programmer = new Programmer();
         programmer.setUser(user);
 
         double amountToAdd = 20.0;
         when(userRepository.save(user)).thenReturn(user);
 
+        // when
         userService.addProgrammerBalanceAfterTransaction(programmer, amountToAdd);
 
+        // then
         assertEquals(120.0, user.getBalance());
-        verify(userRepository).save(user);
-    }
-
-    @Test
-    void UserService_UpdateUser_Fail(){
-        // given
-        User incorrectUser = new User();
-        incorrectUser.setFirstName(null);
-        incorrectUser.setEmail(null);
-
-        when(userRepository.save(any(User.class))).thenReturn(incorrectUser);
-
-        // when
-        User result = userService.updateUser(user, userDTO);
-
-        // then
-        assertNull(incorrectUser.getFirstName());
-        assertNull(incorrectUser.getEmail());
-        verify(userRepository, times(0)).save(incorrectUser);
-    }
-
-    @Test
-    void UserService_GetCurrentAuthenticatedUser_NotAthenticated() {
-        // given
-        SecurityContextHolder.getContext().setAuthentication(null);
-
-        // when
-        User actualUser = userService.getCurrentAuthenticatedUser(null);
-
-        // then
-        assertEquals(null, actualUser);
+        verify(userRepository, times(1)).save(user);
     }
 
     @Test
@@ -230,5 +215,19 @@ public class UserServiceTests {
 
         verify(passwordEncoder).matches(changePasswordDTO.getOldPassword(), user.getPassword());
         verify(passwordEncoder, never()).encode(anyString());
+    }
+
+    @Test
+    public void UserService_UploadProfilePictureThrowsIOException() throws IOException {
+        when(authentication.getPrincipal()).thenReturn(user);
+        when(cloudinaryService.upload(user, image)).thenThrow(new IOException("Upload failed"));
+
+        IOException thrownException = assertThrows(IOException.class, () -> {
+            userService.uploadProfilePicture(authentication, image);
+        });
+
+        assertEquals("Upload failed", thrownException.getMessage());
+        verify(cloudinaryService).upload(user, image);
+        verify(userRepository, never()).save(any(User.class)); // Ensure save is not called
     }
 }

@@ -1,3 +1,4 @@
+import enigma.halodev.controller.SessionControllerTests;
 import enigma.halodev.controller.SkillControllerTests;
 import enigma.halodev.controller.TopicControllerTests;
 import enigma.halodev.repository.SkillRepositoryTests;
@@ -16,6 +17,7 @@ import org.junit.platform.suite.api.Suite;
         SkillRepositoryTests.class,
         SkillControllerTests.class,
         TransactionServiceTests.class,
+        SessionControllerTests.class,
         SessionServiceTests.class,
         ProgrammmerServiceTests.class,
         AuthServiceTests.class,

@@ -22,8 +22,6 @@ public class TopicController {
     public ResponseEntity<PageResponse<Topic>> getAll(
             @PageableDefault Pageable pageable
     ) {
-        return Response.page(
-                topicService.getAll(pageable)
-        );
+        return Response.page(topicService.getAll(pageable));
     }
 }
