@@ -49,7 +49,7 @@ public class SessionControllerTests {
     private SessionDTO sessionDTO;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void beforeEach() throws Exception {
         user = User.builder()
                 .username("testuser")
                 .password("{noop}testpassword")
@@ -84,7 +84,7 @@ public class SessionControllerTests {
     }
 
     @Test
-    void createSession_ReturnsCreated() throws Exception {
+    void SessionController_CreateSession_ReturnsCreated() throws Exception {
         when(sessionService.create(any(User.class), any(SessionDTO.class))).thenReturn(session);
 
         String jsonContent = "{"
@@ -107,7 +107,7 @@ public class SessionControllerTests {
     }
 
     @Test
-    void completeSession_ReturnsSuccess() throws Exception {
+    void SessionController_CompleteSession_ReturnsSuccess() throws Exception {
         when(sessionService.completeSession(any(User.class), anyLong())).thenReturn(session);
 
         RequestBuilder request = patch("/api/sessions/1/complete")

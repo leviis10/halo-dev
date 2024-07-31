@@ -26,7 +26,7 @@ public class CustomUserDetailsServiceTests {
     private CustomUserDetailsService customUserDetailsService;
 
     @Test
-    void testLoadUserByUsername_UserFound() {
+    void CustomeUserDetailsService_TestLoadUserByUsername_UserFound() {
         // given
         String username = "testuser";
         User mockUser = new User();
@@ -41,7 +41,7 @@ public class CustomUserDetailsServiceTests {
     }
 
     @Test
-    void testLoadUserByUsername_UserNotFound() {
+    void CustomeUserDetailsService_TestLoadUserByUsername_UserNotFound() {
         // given
         String username = "testuser";
         when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
