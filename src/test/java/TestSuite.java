@@ -3,6 +3,7 @@ import enigma.halodev.controller.SkillControllerTests;
 import enigma.halodev.controller.TopicControllerTests;
 import enigma.halodev.repository.SkillRepositoryTests;
 import enigma.halodev.repository.TopicRepositoryTests;
+import enigma.halodev.security.CustomUserDetailsServiceTests;
 import enigma.halodev.service.*;
 import enigma.halodev.utils.ConvertMultipartToFileTests;
 import org.junit.platform.suite.api.SelectClasses;
@@ -22,6 +23,7 @@ import org.junit.platform.suite.api.Suite;
         ProgrammmerServiceTests.class,
         AuthServiceTests.class,
         UserServiceTests.class,
+        CustomUserDetailsServiceTests.class,
         ConvertMultipartToFileTests.class
 })
 
