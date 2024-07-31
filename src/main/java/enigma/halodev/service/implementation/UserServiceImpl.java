@@ -129,7 +129,7 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(user);
     }
 
-    private void updateTransactionStatus(Long transactionId, String orderId, User user, Double amount) {
+    public void updateTransactionStatus(Long transactionId, String orderId, User user, Double amount) {
         for (int i = 0; i < 100; i++) {
             try {
                 GetTransactionDetailResponse response = restClient
@@ -157,7 +157,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void addBalanceAfterTransaction(User user, Double amount) {
+    public void addBalanceAfterTransaction(User user, Double amount) {
         user.setBalance(user.getBalance() + amount);
         userRepository.save(user);
     }

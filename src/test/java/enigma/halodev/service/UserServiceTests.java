@@ -1,6 +1,8 @@
 package enigma.halodev.service;
 
 import enigma.halodev.dto.UserDTO;
+import enigma.halodev.exception.PasswordNotMatchException;
+import enigma.halodev.model.Programmer;
 import enigma.halodev.model.User;
 import enigma.halodev.repository.UserRepository;
 import enigma.halodev.service.implementation.UserServiceImpl;
@@ -13,9 +15,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -38,7 +43,10 @@ public class UserServiceTests {
     private PasswordEncoder passwordEncoder;
 
     @Mock
-    private UserDetails userDetails;
+    private CloudinaryService cloudinaryService;
+
+    @Mock
+    private MultipartFile image;
 
     @Mock
     User user;
@@ -64,6 +72,8 @@ public class UserServiceTests {
         userDTO.setEmail("new.email@example.com");
 
         user.setPassword("encodedOldPassword");
+        user.setBalance(100.0);
+        user.setProfilePicture("initialProfilePictureUrl");
 
         changePasswordDTO = new UserDTO.ChangePasswordDTO();
         changePasswordDTO.setOldPassword("oldPassword");
@@ -119,6 +129,64 @@ public class UserServiceTests {
     }
 
     @Test
+    public void testUploadProfilePicture() throws IOException {
+        when(authentication.getPrincipal()).thenReturn(user);
+        when(cloudinaryService.upload(user, image)).thenReturn("newProfilePictureUrl");
+        when(userRepository.save(user)).thenReturn(user);
+
+        User updatedUser = userService.uploadProfilePicture(authentication, image);
+
+        assertEquals("newProfilePictureUrl", updatedUser.getProfilePicture());
+        verify(cloudinaryService).upload(user, image);
+        verify(userRepository).save(user);
+    }
+
+    @Test
+    public void testDeleteUser() {
+        doNothing().when(userRepository).delete(user);
+
+        userService.delete(user);
+
+        verify(userRepository).delete(user);
+    }
+
+    @Test
+    public void testAddBalanceAfterTransaction() {
+        double amountToAdd = 50.0;
+        when(userRepository.save(user)).thenReturn(user);
+
+        userService.addBalanceAfterTransaction(user, amountToAdd);
+
+        assertEquals(150.0, user.getBalance());
+        verify(userRepository).save(user);
+    }
+
+    @Test
+    public void testChargeUserAfterTransaction() {
+        double amountToCharge = 30.0;
+        when(userRepository.save(user)).thenReturn(user);
+
+        userService.chargeUserAfterTransaction(user, amountToCharge);
+
+        assertEquals(70.0, user.getBalance());
+        verify(userRepository).save(user);
+    }
+
+    @Test
+    public void testAddProgrammerBalanceAfterTransaction() {
+        Programmer programmer = new Programmer();
+        programmer.setUser(user);
+
+        double amountToAdd = 20.0;
+        when(userRepository.save(user)).thenReturn(user);
+
+        userService.addProgrammerBalanceAfterTransaction(programmer, amountToAdd);
+
+        assertEquals(120.0, user.getBalance());
+        verify(userRepository).save(user);
+    }
+
+    @Test
     void UserService_UpdateUser_Fail(){
         // given
         User incorrectUser = new User();
@@ -146,5 +214,21 @@ public class UserServiceTests {
 
         // then
         assertEquals(null, actualUser);
+    }
+
+    @Test
+    public void TestService_ChangePassword_Fail() {
+        // when
+        when(passwordEncoder.matches(changePasswordDTO.getOldPassword(), user.getPassword())).thenReturn(false);
+
+        // then
+        assertThatThrownBy(() -> userService.changePassword(user, changePasswordDTO))
+                .isInstanceOf(PasswordNotMatchException.class)
+                .hasMessageContaining("Password doesn't match");
+
+        verify(userRepository, never()).save(any(User.class));
+
+        verify(passwordEncoder).matches(changePasswordDTO.getOldPassword(), user.getPassword());
+        verify(passwordEncoder, never()).encode(anyString());
     }
 }
