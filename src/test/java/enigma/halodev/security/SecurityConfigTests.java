@@ -19,7 +19,7 @@ public class SecurityConfigTests {
     SecurityConfig securityConfig;
 
     @Test
-    public void SecurityConfig_JwtAuthenticationFilter() {
+    void SecurityConfig_JwtAuthenticationFilter() {
         // when
         JwtAuthenticationFilter filter = securityConfig.jwtAuthenticationFilter();
 
@@ -28,7 +28,7 @@ public class SecurityConfigTests {
     }
 
     @Test
-    public void SecurityConfig_AuthenticationManager() throws Exception {
+    void SecurityConfig_AuthenticationManager() throws Exception {
         // given
         AuthenticationConfiguration mockConfig = mock(AuthenticationConfiguration.class);
         AuthenticationManager mockManager = mock(AuthenticationManager.class);
@@ -42,7 +42,7 @@ public class SecurityConfigTests {
     }
 
     @Test
-    public void SecurityConfig_PasswordEncoder() {
+    void SecurityConfig_PasswordEncoder() {
         // when
         PasswordEncoder encoder = securityConfig.passwordEncoder();
 
